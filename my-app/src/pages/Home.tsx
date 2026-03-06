@@ -1,11 +1,15 @@
-import Card from "../components/Card";
+import Card from "../components/Home/Card"
+import OrderCard from "../components/Home/OrderCard"
 
 export default function Home() {
     return (
-        <div className="h-screen p-6">
-            <h1>Main Content</h1>
-            <p>This is where your main content goes.</p>
-            
+        <div className="h-screen p-6 text-gray-800">
+            {/* Header */}
+            <p className="text-3xl font-extrabold mb-5">หน้าแรก</p>
+
+            {/* Content */}
+            <Card/>
+            <OrderCard/>
         </div>
     )
 }

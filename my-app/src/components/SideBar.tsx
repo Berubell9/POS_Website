@@ -7,12 +7,12 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
 const SideBar = () => {
   return (
-    <div className="h-full bg-white text-black w-16 md:w-64 transition-all duration-300">
+    <div className="h-full bg-white text-gray-700 w-16 md:w-60 transition-all duration-300 ">
       {/* ชื่อร้าน */}
       <div className="p-4 flex items-center gap-3">
         <img src="/crepe.png" className="w-10 h-10" />
-        <div>
-          <h2 className="text-2xl font-extrabold hidden md:block">เครปญี่ปุ่น</h2>
+        <div className="ml-1">
+          <h2 className="text-2xl text-pink-400 font-extrabold hidden md:block">เครปญี่ปุ่น</h2>
           <p className="text-sm text-gray-500 font-light hidden md:block">ระบบ POS</p>
         </div>
       </div>
@@ -27,7 +27,7 @@ const SideBar = () => {
           to="/"
           className={({ isActive }) =>
             `flex p-3 md:p-4 mb-2 rounded-md transition
-            ${isActive ? "text-white bg-pink-400 shadow-md" : "hover:bg-gray-100"}`
+            ${isActive ? "text-white bg-pink-400 shadow-md" : "hover:bg-pink-50"}`
           }>
           <HomeFilledIcon />
           <p className="ml-2 hidden md:inline">หน้าแรก</p>
@@ -38,7 +38,7 @@ const SideBar = () => {
           to="/menu"
           className={({ isActive }) =>
             `flex p-3 md:p-4 mb-2 rounded-md transition
-            ${isActive ? "text-white bg-pink-400 shadow-md" : "hover:bg-gray-100"}`
+            ${isActive ? "text-white bg-pink-400 shadow-md" : "hover:bg-pink-50"}`
           }>
           <RestaurantMenuIcon />
           <p className="ml-2 hidden md:inline">เมนู</p>
@@ -49,7 +49,7 @@ const SideBar = () => {
           to="/order"
           className={({ isActive }) =>
             `flex p-3 md:p-4 mb-2 rounded-md transition
-            ${isActive ? "text-white bg-pink-400 shadow-md" : "hover:bg-gray-100"}`
+            ${isActive ? "text-white bg-pink-400 shadow-md" : "hover:bg-pink-50"}`
           }>
           <ShoppingCartIcon />
           <p className="ml-2 hidden md:inline">ออเดอร์</p>
@@ -60,7 +60,7 @@ const SideBar = () => {
           to="/manage-menu"
           className={({ isActive }) =>
             `flex p-3 md:p-4 mb-2 rounded-md transition
-            ${isActive ? "text-white bg-pink-400 shadow-md" : "hover:bg-gray-100"}`
+            ${isActive ? "text-white bg-pink-400 shadow-md" : "hover:bg-pink-50"}`
           }>
           <MenuBookIcon />
           <p className="ml-2 hidden md:inline">จัดการเมนู</p>
@@ -71,7 +71,7 @@ const SideBar = () => {
           to="/dashboard"
           className={({ isActive }) =>
             `flex p-3 md:p-4 mb-2 rounded-md transition
-            ${isActive ? "text-white bg-pink-400 shadow-md" : "hover:bg-gray-100"}`
+            ${isActive ? "text-white bg-pink-400 shadow-md" : "hover:bg-pink-50"}`
           }>
           <EqualizerIcon />
           <p className="ml-2 hidden md:inline">ยอดขาย</p>

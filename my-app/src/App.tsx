@@ -13,7 +13,7 @@ export default function App() {
       <BrowserRouter>
       <div className="flex h-screen">
         <SideBar />
-        <div className="flex-1 bg-gray-100">
+        <div className="flex-1 bg-pink-50">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/menu" element={<Menu />} />
