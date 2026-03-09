@@ -1,11 +1,11 @@
-import Card from "../components/Card";
 
 export default function ManageMenu() {
     return (
-        <div className="h-screen p-6">
-            <h1>Main Content</h1>
-            <p>This is where your main content goes.</p>
-            <Card/>
+        <div className="h-full p-6 pb-6 text-gray-800">
+            {/* Header */}
+            <p className="text-3xl font-extrabold mb-5">หน้าแรก</p>
+
+            {/* Content */}
         </div>
     )
 }

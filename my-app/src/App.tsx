@@ -9,11 +9,11 @@ import DashBoard from "./pages/DashBoard";
 
 export default function App() {
   return (
-    <div className="h-full w-full font-kanit">
-      <BrowserRouter>
-      <div className="flex h-screen">
+    <BrowserRouter>
+      <div className="flex h-screen w-full bg-gray-50">
         <SideBar />
-        <div className="flex-1 bg-pink-50">
+
+        <div className="flex-1 h-screen overflow-y-auto">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/menu" element={<Menu />} />
@@ -24,7 +24,5 @@ export default function App() {
         </div>
       </div>
     </BrowserRouter>
-
-    </div>
-  )
+  );
 }

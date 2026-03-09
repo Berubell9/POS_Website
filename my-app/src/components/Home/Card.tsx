@@ -12,7 +12,7 @@ export default function Card() {
                     <MonetizationOnIcon className="text-green-500 text-2xl" />
                     <p className="text-gray-400 text-sm md:text-base">ยอดขายวันนี้</p>
                 </div>
-                <p className="font-extrabold text-xl md:text-2xl">฿0</p>
+                <p className="font-extrabold text-xl md:text-2xl"><span>฿</span>0</p>
             </div>
 
             {/* จำนวนออเดอร์วันนี้ */}
