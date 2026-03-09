@@ -7,7 +7,7 @@ import DescriptionIcon from '@mui/icons-material/Description';
 
 const SideBar = () => {
   return (
-    <div className="h-full p-2 md:p-4 bg-white text-gray-800 w-16 md:w-60 transition-all duration-300">
+    <div className="h-full p-2 md:p-4 bg-white text-gray-800 w-16 md:w-60 transition-all">
       {/* ชื่อร้าน */}
       <div className="p-2 flex items-center gap-3 border-b border-gray-200">
         <img src="/crepe.png" className="w-10 h-10 object-contain" />

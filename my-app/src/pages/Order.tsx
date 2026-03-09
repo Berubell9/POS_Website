@@ -1,11 +1,12 @@
-import Card from "../components/Menu/Card";
+
 
 export default function Order() {
     return (
         <div className="h-full p-6 pb-6 text-gray-800">
-            <h1>Main Content</h1>
-            <p>This is where your main content goes.</p>
-            <Card/>
+            {/* Header */}
+            <p className="text-3xl font-extrabold mb-5">ออเดอร์</p>
+
+            {/* Content */}
         </div>
     )
 }

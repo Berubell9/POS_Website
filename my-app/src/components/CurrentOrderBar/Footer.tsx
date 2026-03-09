@@ -19,7 +19,7 @@ export default function Footer() {
             {/* รวมทั้งหมด + vat */}
             <div className="flex items-center justify-between text-lg font-extrabold text-gray-800">
                 <p>รวมทั้งหมด</p>
-                <p><span>฿</span>11</p>
+                <p><span>฿</span>117.7</p>
             </div>
             {/* กดชำระเงินเเล้วจะบันทึกออเดอร์ */}
             <button className="w-full mt-2 rounded-md shadow-md bg-pink-400 py-3 text-white font-semibold hover:bg-pink-500 transition">

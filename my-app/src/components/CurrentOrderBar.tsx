@@ -1,8 +1,8 @@
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CloseIcon from '@mui/icons-material/Close';
-import OrderItem from '../components/CurrentOrder/OrderItem'
-import Footer from '../components/CurrentOrder/Footer'
+import OrderItem from './CurrentOrderBar/OrderItem'
+import Footer from './CurrentOrderBar/Footer'
 
 type CurrentOrderProps = {
     isMobileOpen?: boolean;
@@ -17,7 +17,7 @@ export default function CurrentOrder({
     return (
         <>
             {/* Desktop */}
-            <div className="hidden xl:flex w-80 h-full bg-white p-4 shadow-md flex-col">
+            <div className="hidden xl:flex w-80 h-full bg-white p-4 shadow-md flex-col ">
                 {/* Header */}
                 <div className="flex mt-2 items-center justify-between">
                     <div className="flex items-center">
