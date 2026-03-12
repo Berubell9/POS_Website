@@ -23,9 +23,7 @@ export default function Menu() {
                 <Tabs />
 
                 {/* การ์ดเมนู */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mt-5">
-                    <ProductCard/>
-                </div>
+                <ProductCard/>
             </div>
 
             {/* Current Order Bar */}

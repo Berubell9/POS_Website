@@ -10,7 +10,7 @@ import DashBoard from "./pages/DashBoard";
 export default function App() {
   return (
     <BrowserRouter>
-      <div className="flex h-screen w-full bg-gray-50">
+      <div className="flex h-screen w-full bg-gray-50 shadow-2xs">
         <SideBar />
 
         <div className="flex-1 h-screen overflow-y-auto">

@@ -26,13 +26,13 @@ export default function OrderCard() {
                             <div className='flex w-full mt-2 items-center bg-gray-100 rounded-md p-2'>
                                 <img src='test.jpg' className='h-10 object-contain rounded-md'></img>
                                 <p className='ml-2 truncate'>ชื่อเมนู bbbbbbbbbbbbbbbbbbbbbbbbb</p>
-                                <p className='ml-2 text-sm text-gray-800 px-2 py-1 bg-pink-200 rounded-2xl'>x2</p>
+                                <p className='ml-2 text-sm text-pink-800 px-2 py-1 bg-pink-200 rounded-2xl'>x2</p>
                             </div>
                             {/* ตัวอย่าง box เเต่ละรายการ */}
                             <div className='flex w-full mt-2 items-center bg-gray-100 rounded-md p-2'>
                                 <img src='test.jpg' className='h-10 object-contain rounded-md'></img>
                                 <p className='ml-2 truncate'>ชื่อเมนู</p>
-                                <p className='ml-2 text-sm text-gray-800 px-2 py-1 bg-pink-200 rounded-2xl'>x2</p>
+                                <p className='ml-2 text-sm text-pink-800 px-2 py-1 bg-pink-200 rounded-2xl'>x2</p>
                             </div>
                         </div>
                         {/* ปุ่มไปขั้นตอนถัดไป */}
