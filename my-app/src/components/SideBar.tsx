@@ -1,13 +1,13 @@
 import { NavLink } from "react-router-dom";
-import HomeFilledIcon from '@mui/icons-material/HomeFilled';
-import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
+import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
+import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
+import RestaurantOutlinedIcon from '@mui/icons-material/RestaurantOutlined';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
-import EqualizerIcon from '@mui/icons-material/Equalizer';
-import DescriptionIcon from '@mui/icons-material/Description';
+import AssessmentOutlinedIcon from '@mui/icons-material/AssessmentOutlined';
 
 const SideBar = () => {
   return (
-    <div className="h-full p-2 md:p-4 bg-white text-gray-800 w-16 md:w-60 transition-all">
+    <div className="h-full p-2 md:p-4 bg-white text-gray-800 w-16 md:w-60 transition-all shadow-xl">
       {/* ชื่อร้าน */}
       <div className="p-2 flex items-center gap-3 border-b border-gray-200">
         <img src="/crepe.png" className="w-10 h-10 object-contain" />
@@ -24,9 +24,9 @@ const SideBar = () => {
           to="/"
           className={({ isActive }) =>
             `flex p-3.5 md:p-3 rounded-md transition items-center
-            ${isActive ? "text-white bg-pink-400 shadow-md" : "hover:bg-pink-50"}`
+            ${isActive ? "text-white bg-pink-400 shadow-md" : "hover:bg-gray-100"}`
           }>
-          <HomeFilledIcon sx={{ fontSize: 20 }}/>
+          <StorefrontOutlinedIcon sx={{ fontSize: 20 }}/>
           <p className="ml-2 hidden md:inline">หน้าแรก</p>
         </NavLink>
         
@@ -35,9 +35,9 @@ const SideBar = () => {
           to="/menu"
           className={({ isActive }) =>
             `flex p-3.5 md:p-3 rounded-md transition items-center
-            ${isActive ? "text-white bg-pink-400 shadow-md" : "hover:bg-pink-50"}`
+            ${isActive ? "text-white bg-pink-400 shadow-md" : "hover:bg-gray-100"}`
           }>
-          <RestaurantMenuIcon sx={{ fontSize: 20 }} />
+          <RestaurantOutlinedIcon sx={{ fontSize: 20 }} />
           <p className="ml-2 hidden md:inline">เมนู</p>
         </NavLink>
         
@@ -46,9 +46,9 @@ const SideBar = () => {
           to="/order"
           className={({ isActive }) =>
             `flex p-3.5 md:p-3 rounded-md transition items-center
-            ${isActive ? "text-white bg-pink-400 shadow-md" : "hover:bg-pink-50"}`
+            ${isActive ? "text-white bg-pink-400 shadow-md" : "hover:bg-gray-100"}`
           }>
-          <DescriptionIcon sx={{ fontSize: 20 }}/>
+          <DescriptionOutlinedIcon sx={{ fontSize: 20 }}/>
           <p className="ml-2 hidden md:inline">ออเดอร์</p>
         </NavLink>
 
@@ -57,7 +57,7 @@ const SideBar = () => {
           to="/manage-menu"
           className={({ isActive }) =>
             `flex p-3.5 md:p-3 rounded-md transition items-center
-            ${isActive ? "text-white bg-pink-400 shadow-md" : "hover:bg-pink-50"}`
+            ${isActive ? "text-white bg-pink-400 shadow-md" : "hover:bg-gray-100"}`
           }>
           <MenuBookIcon sx={{ fontSize: 20 }}/>
           <p className="ml-2 hidden md:inline">จัดการเมนู</p>
@@ -68,9 +68,9 @@ const SideBar = () => {
           to="/dashboard"
           className={({ isActive }) =>
             `flex p-3.5 md:p-3 rounded-md transition items-center
-            ${isActive ? "text-white bg-pink-400 shadow-md" : "hover:bg-pink-50"}`
+            ${isActive ? "text-white bg-pink-400 shadow-md" : "hover:bg-gray-100"}`
           }>
-          <EqualizerIcon sx={{ fontSize: 20 }}/>
+          <AssessmentOutlinedIcon  sx={{ fontSize: 20 }}/>
           <p className="ml-2 hidden md:inline">ยอดขาย</p>
         </NavLink>
       </div>

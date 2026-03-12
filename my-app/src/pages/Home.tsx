@@ -1,4 +1,4 @@
-import Card from "../components/Home/Card"
+import Card from "../components/Home/StatusCard"
 import OrderCard from "../components/Home/OrderCard"
 
 export default function Home() {

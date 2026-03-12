@@ -1,4 +1,4 @@
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CloseIcon from '@mui/icons-material/Close';
 import OrderItem from './CurrentOrderBar/OrderItem'
@@ -13,15 +13,15 @@ export default function CurrentOrder({
     isMobileOpen = false,
     onClose,
 }: CurrentOrderProps) {
-    
+
     return (
         <>
             {/* Desktop */}
-            <div className="hidden xl:flex w-80 h-full bg-white p-4 shadow-md flex-col ">
+            <div className="hidden pr-2 xl:flex w-80 h-full bg-white p-4 shadow-md flex-col ">
                 {/* Header */}
                 <div className="flex mt-2 items-center justify-between">
                     <div className="flex items-center">
-                        <ShoppingCartIcon sx={{ fontSize: 20 }} />
+                        <ShoppingCartOutlinedIcon sx={{ fontSize: 20 }} />
                         <p className="font-extrabold text-xl ml-2">ตะกร้าสินค้า</p>
                     </div>
                     {/* ปุ่มลบรายการทั้งหมด */}
@@ -33,17 +33,16 @@ export default function CurrentOrder({
 
                 {/* Content */}
                 {/* ใส่เลขโต๊ะ */}
-                <input
-                    type="text"
-                    placeholder="หมายเลขโต๊ะ"
-                    className="p-2 mt-5 text-md w-full rounded-md border border-gray-200 outline-none focus:outline-none focus:ring-0"
-                />
+                <label>หมายเลขโต๊ะ</label>
+                <select className="mt-1 text-gray-400 w-full border border-gray-200 rounded-md p-2 h-11 outline-none">
+                    <option>เลือกหมายเลขโต๊ะ</option>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                </select>
 
                 {/* แสดงรายการเมนูทั้งหมด ถ้ารายการมีเยอะเกินกรอบจะมี scroll ขึ้น */}
-                <div className="mt-5 flex-1 space-y-4 overflow-y-auto pr-2">
-                    <OrderItem />
-                    <OrderItem />
-                    <OrderItem />
+                <div className="mt-5 flex-1 space-y-2 overflow-y-auto">
                     <OrderItem />
                 </div>
 
@@ -53,14 +52,14 @@ export default function CurrentOrder({
 
             {/* Mobile */}
             {isMobileOpen && (
-                <div className="fixed inset-0 z-50 bg-white flex flex-col xl:hidden">
+                <div className="fixed pr-2 inset-0 z-50 bg-white flex flex-col xl:hidden">
                     {/* Header */}
                     <div className="flex mt-2 items-center justify-between p-4 border-b border-gray-200">
                         <div className="flex items-center">
-                            <ShoppingCartIcon sx={{ fontSize: 20 }} />
+                            <ShoppingCartOutlinedIcon sx={{ fontSize: 20 }} />
                             <p className="font-extrabold text-xl ml-2">ตะกร้าสินค้า</p>
                         </div>
-                        
+
                         <div className="flex items-center gap-3">
                             {/* ปุ่มลบรายการทั้งหมด */}
                             <button className="flex items-center text-red-500">
@@ -77,18 +76,15 @@ export default function CurrentOrder({
                     {/* Content */}
                     <div className="p-4 flex-1 flex flex-col overflow-hidden">
                         {/* ใส่เลขโต๊ะ */}
-                        <input
-                            type="text"
-                            placeholder="หมายเลขโต๊ะ"
-                            className="p-2 text-md w-full rounded-md border border-gray-200 outline-none focus:outline-none focus:ring-0"
-                        />
+                <label>หมายเลขโต๊ะ</label>
+                <select className="mt-1 text-gray-400 w-full border border-gray-200 rounded-md p-2 h-11 outline-none">
+                    <option>เลือกหมายเลขโต๊ะ</option>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                </select>
                         {/* แสดงรายการเมนูทั้งหมด ถ้ารายการมีเยอะเกินกรอบจะมี scroll ขึ้น */}
-                        <div className="mt-5 flex-1 space-y-4 overflow-y-auto pr-2">
-                            <OrderItem />
-                            <OrderItem />
-                            <OrderItem />
-                            <OrderItem />
-                            <OrderItem />
+                        <div className="mt-5 flex-1 space-y-2 overflow-y-auto">
                             <OrderItem />
                         </div>
 

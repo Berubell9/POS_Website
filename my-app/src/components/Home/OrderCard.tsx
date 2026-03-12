@@ -18,25 +18,25 @@ export default function OrderCard() {
                 {/* Order Card */}
                 <div className='mt-2 space-y-2'>
                     <div className="min-h-30 p-4 bg-white rounded-xl shadow-sm flex flex-col">
-                        <p className='font-extrabold text-xl'>เลขออเดอร์</p>
+                        <p className='font-extrabold text-xl wrap-break-word'>เลขออเดอร์</p>
                         <p className='text-gray-400 mt-1 text-sm text-thin'><span>โต๊ะ : </span>หมายเลขโต๊ะ</p>
                         {/* แสดงรายการทั้งหมด */}
                         <div className='space-y-2'>
                             {/* box เเต่ละรายการ */}
-                            <div className='flex mt-2 items-center bg-gray-100 rounded-md p-2'>
+                            <div className='flex w-full mt-2 items-center bg-gray-100 rounded-md p-2'>
                                 <img src='test.jpg' className='h-10 object-contain rounded-md'></img>
-                                <p className='ml-2'>ชื่อเมนู</p>
+                                <p className='ml-2 truncate'>ชื่อเมนู bbbbbbbbbbbbbbbbbbbbbbbbb</p>
                                 <p className='ml-2 text-sm text-gray-800 px-2 py-1 bg-pink-200 rounded-2xl'>x2</p>
                             </div>
                             {/* ตัวอย่าง box เเต่ละรายการ */}
-                            <div className='flex mt-2 items-center bg-gray-100 rounded-md p-2'>
+                            <div className='flex w-full mt-2 items-center bg-gray-100 rounded-md p-2'>
                                 <img src='test.jpg' className='h-10 object-contain rounded-md'></img>
-                                <p className='ml-2'>ชื่อเมนู</p>
+                                <p className='ml-2 truncate'>ชื่อเมนู</p>
                                 <p className='ml-2 text-sm text-gray-800 px-2 py-1 bg-pink-200 rounded-2xl'>x2</p>
                             </div>
                         </div>
                         {/* ปุ่มไปขั้นตอนถัดไป */}
-                        <button type="button" className="text-white bg-pink-400 mt-2 hover:bg-pink-500 focus:ring-4 focus:ring-pink-300 shadow-sm font-medium rounded-lg text-sm px-4 py-2.5 focus:outline-none">
+                        <button type="button" className="text-white bg-pink-400 mt-2 hover:bg-pink-500 shadow-sm font-medium rounded-lg text-sm px-4 py-2.5">
                             ขั้นตอนถัดไป
                         </button>
                     </div>

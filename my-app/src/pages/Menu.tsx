@@ -1,7 +1,7 @@
 import { useState } from "react";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 
-import Card from "../components/Menu/Card";
+import ProductCard from "../components/Menu/ProductCard";
 import CurrentOrder from "../components/CurrentOrderBar";
 import Tabs from "../components/Menu/Tabs";
 import SearchBar from "../components/Menu/SearchBar";
@@ -24,12 +24,7 @@ export default function Menu() {
 
                 {/* การ์ดเมนู */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mt-5">
-                    <Card />
-                    <Card />
-                    <Card />
-                    <Card />
-                    <Card />
-                    <Card />
+                    <ProductCard/>
                 </div>
             </div>
 
@@ -44,7 +39,7 @@ export default function Menu() {
                 onClick={() => setIsCartOpen(true)}
                 className="xl:hidden fixed bottom-5 right-5 z-40 w-14 h-14 rounded-full bg-pink-400 text-white shadow-md flex items-center justify-center hover:bg-pink-500 transition"
             >
-                <ShoppingCartIcon />
+                <ShoppingCartOutlinedIcon />
             </button>
         </div>
     );
