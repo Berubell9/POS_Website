@@ -6,11 +6,12 @@ import Menu from "./pages/Menu";
 import Order from "./pages/Order";
 import ManageMenu from "./pages/ManageMenu";
 import DashBoard from "./pages/DashBoard";
+import Setting from "./pages/Setting";
 
 export default function App() {
   return (
     <BrowserRouter>
-      <div className="flex h-screen w-full bg-gray-50 shadow-2xs">
+      <div className="flex h-screen w-full bg-pink-50 shadow-2xs">
         <SideBar />
 
         <div className="flex-1 h-screen overflow-y-auto">
@@ -20,6 +21,7 @@ export default function App() {
             <Route path="/order" element={<Order />} />
             <Route path="/manage-menu" element={<ManageMenu />} />
             <Route path="/dashboard" element={<DashBoard />} />
+            <Route path="/setting" element={<Setting />} />
           </Routes>
         </div>
       </div>
