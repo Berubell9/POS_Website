@@ -1,5 +1,7 @@
 import { useState } from "react";
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+import RestaurantOutlinedIcon from "@mui/icons-material/RestaurantOutlined";
+import FormatListBulletedOutlinedIcon from '@mui/icons-material/FormatListBulletedOutlined';
 
 import ProductCard from "../components/Menu/ProductCard";
 import CurrentOrder from "../components/CurrentOrderBar";
@@ -8,22 +10,40 @@ import SearchBar from "../components/Menu/SearchBar";
 
 export default function Menu() {
     const [isCartOpen, setIsCartOpen] = useState(false);
-
+    const [selectedCategory, setSelectedCategory] = useState("ทั้งหมด");
+    const [searchTerm, setSearchTerm] = useState("");
     return (
         <div className="flex h-full text-gray-800 relative">
             {/* ฝั่งเมนู */}
-            <div className="flex-1 p-6 pb-6 overflow-y-auto">
+            <div className="flex-1 p-4 pb-16 overflow-y-auto">
                 {/* Header */}
-                <p className="text-3xl font-extrabold mb-5">เมนู</p>
-                
-                {/* ค้นหาเมนู */}
-                <SearchBar />
+                <div className="flex items-center p-4 bg-white rounded-xl shadow-sm">
+                    <div className="mr-4 p-2 items-center bg-pink-400 rounded-md text-white shadow-sm">
+                        <RestaurantOutlinedIcon sx={{ fontSize: 30 }} />
+                    </div>
+                    <p className="text-3xl font-extrabold">เมนู</p>
+                </div>
 
-                {/* แยกประเภทเมนู */}
-                <Tabs />
+                {/* Content */}
+                <Tabs
+                    value={selectedCategory}
+                    onChange={setSelectedCategory}
+                />
 
-                {/* การ์ดเมนู */}
-                <ProductCard/>
+                <div className="mt-4 flex items-center">
+                    <FormatListBulletedOutlinedIcon className="text-pink-400 mr-2" />
+                    <p className="text-xl font-extrabold">รายการเมนู</p>
+                </div>
+
+                <SearchBar
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
+
+                <ProductCard
+                    selectedCategory={selectedCategory}
+                    searchTerm={searchTerm}
+                />
             </div>
 
             {/* Current Order Bar */}

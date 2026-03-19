@@ -127,6 +127,7 @@ export default function ProductItemTable({
 
     return (
         <div className="mt-4 overflow-hidden rounded-xl bg-white shadow-sm">
+            {/* หัวตาราง */}
             <div className="flex flex-col gap-3 px-4 py-3 md:flex-row md:items-center md:justify-between">
                 {/* Title */}
                 <div className="flex items-center">
@@ -150,7 +151,7 @@ export default function ProductItemTable({
             </div>
 
             <table className="min-w-full">
-                {/* หัวตาราง */}
+                {/* คอลัมตาราง */}
                 <thead className="bg-gray-100 text-gray-500 font-extrabold">
                     <tr>
                         <th className="hidden sm:table-cell px-4 py-3 text-left">ลำดับ</th>
@@ -189,7 +190,7 @@ export default function ProductItemTable({
                                 </td>
 
                                 {/* ชื่อเมนู */}
-                                <td className="px-4 py-3 text-left max-w-25">{product.name}</td>
+                                <td className="px-4 py-3 text-left">{product.name}</td>
                                 
                                 {/* หมวดหมู่ */}
                                 <td className="hidden lg:table-cell px-4 py-3 text-left">
