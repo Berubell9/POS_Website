@@ -33,7 +33,8 @@ export default function DeleteMenuButton({
                 alert("ลบเมนูไม่สำเร็จ");
                 return;
             }
-
+            
+            // ลบรูปใน product-images
             if (product.image) {
                 const marker = "/storage/v1/object/public/product-images/";
                 const index = product.image.indexOf(marker);

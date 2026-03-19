@@ -15,10 +15,12 @@ export default function Tabs({ value, onChange }: Props) {
 
     const [categories, setCategories] = useState<Category[]>([]);
 
+    // แสดงข้อมูลเมื่อเปิดหน้าต่างที่มี Tab ขึ้นมา
     useEffect(() => {
         fetchCategories();
     }, []);
 
+    // ดึงข้อมูล Categories
     const fetchCategories = async () => {
         const { data, error } = await supabase
             .from("Categories")
@@ -33,13 +35,14 @@ export default function Tabs({ value, onChange }: Props) {
         setCategories(data || []);
     };
 
+    // ให้ id=0 เป็นทั้งหมด
     const tabs = [
         { id: 0, name: "ทั้งหมด" },
         ...categories
     ];
 
     return (
-        <div className="mt-4 p-4 bg-white rounded-xl shadow-sm grid grid-cols-2 lg:grid-cols-10 gap-3">
+        <div className="mt-4 p-4 bg-white rounded-xl shadow-sm grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3">
 
             {tabs.map((tab) => (
                 <button
