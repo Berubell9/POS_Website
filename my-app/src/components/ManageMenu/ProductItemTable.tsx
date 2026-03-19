@@ -145,7 +145,7 @@ export default function ProductItemTable({
                             }}
                         />
                     </div>
-                    <AddMenuButton />
+                    <AddMenuButton onAdded={fetchData}/>
                 </div>
             </div>
 
