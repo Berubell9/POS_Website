@@ -1,7 +1,7 @@
 // เเก้เพิ่มหมวดหมูเเละโต๊ะ
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
-import CategoriesItemTable from "../components/Setting/CategoriesItemTable";
-import TableItemTable from "../components/Setting/TableItemTable";
+import CategoriesItemTable from "../components/Setting/CategoryItemTable/CategoryItemTable";
+import TableItemTable from "../components/Setting/TableItemTable/TableItemTable";
 
 export default function Setting() {
     return (

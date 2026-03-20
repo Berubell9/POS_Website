@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from "react";
-import supabase from "../../utils/supabase";
 import AddIcon from "@mui/icons-material/Add";
 
 type Product = {
@@ -22,49 +21,49 @@ type ProductCardProps = {
     onAddToOrder?: (product: Product) => void;
 };
 
+const API_BASE = "http://localhost:3001/api";
+
 export default function ProductCard({
     refreshKey,
     selectedCategory = "ทั้งหมด",
     searchTerm = "",
     onAddToOrder,
-
 }: ProductCardProps) {
+    // State
     const [products, setProducts] = useState<Product[]>([]);
     const [categories, setCategories] = useState<Category[]>([]);
     const [loading, setLoading] = useState(false);
-
-
+    
+    // สั่งให้โหลดข้อมูลตอนเริ่ม render หรือเมื่อ refreshKey เปลี่ยน
     useEffect(() => {
         fetchData();
     }, [refreshKey]);
 
+    // ฟังก์ชันโหลดข้อมูลทั้งหมด
     const fetchData = async () => {
         try {
             setLoading(true);
 
+            // ดึงข้อมูลจากในตาราง Products และCategories จาก supabase
             const [productsRes, categoriesRes] = await Promise.all([
-                supabase
-                    .from("Products")
-                    .select("id, name, price, image, category_id")
-                    .order("id", { ascending: true }),
-                supabase
-                    .from("Categories")
-                    .select("id, name")
-                    .order("id", { ascending: true }),
+                fetch(`${API_BASE}/products`),
+                fetch(`${API_BASE}/categories`),
             ]);
 
-            if (productsRes.error) {
-                console.error("Error fetching products:", productsRes.error);
-                return;
+            if (!productsRes.ok) {
+                throw new Error("โหลดข้อมูลสินค้าไม่สำเร็จ");
             }
 
-            if (categoriesRes.error) {
-                console.error("Error fetching categories:", categoriesRes.error);
-                return;
+            if (!categoriesRes.ok) {
+                throw new Error("โหลดข้อมูลหมวดหมู่ไม่สำเร็จ");
             }
 
-            setProducts((productsRes.data as Product[]) || []);
-            setCategories((categoriesRes.data as Category[]) || []);
+            const productsData = await productsRes.json();
+            const categoriesData = await categoriesRes.json();
+
+            // Set state
+            setProducts(productsData || []);
+            setCategories(categoriesData || []);
         } catch (error) {
             console.error("Unexpected fetch error:", error);
         } finally {
@@ -72,12 +71,14 @@ export default function ProductCard({
         }
     };
 
+    // แปลง categories array ให้กลายเป็น object เพื่อใช้ค้นหาง่ายขึ้น
     const categoryMap = useMemo(() => {
         return Object.fromEntries(
             categories.map((category) => [category.id, category.name])
         ) as Record<number, string>;
     }, [categories]);
 
+    // กรองสำหรับใช้ค้นหาเมนู
     const filteredProducts = useMemo(() => {
         return products.filter((product) => {
             // ค้นหาจากชื่อสินค้า

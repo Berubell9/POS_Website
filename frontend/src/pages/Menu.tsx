@@ -4,7 +4,7 @@ import RestaurantOutlinedIcon from "@mui/icons-material/RestaurantOutlined";
 import FormatListBulletedOutlinedIcon from '@mui/icons-material/FormatListBulletedOutlined';
 
 import ProductCard from "../components/Menu/ProductCard";
-import CurrentOrder from "../components/CurrentOrderBar";
+import CurrentOrder from "../components/CurrentOrderBar/CurrentOrderBar";
 import Tabs from "../components/Menu/Tabs";
 import SearchBar from "../components/Menu/SearchBar";
 

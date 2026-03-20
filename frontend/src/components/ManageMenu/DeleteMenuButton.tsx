@@ -1,5 +1,4 @@
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import supabase from "../../utils/supabase";
 
 type Product = {
     id: number;
@@ -12,6 +11,8 @@ type DeleteMenuButtonProps = {
     onDeleted?: () => void | Promise<void>;
 };
 
+const API_BASE = "http://localhost:3001/api";
+
 export default function DeleteMenuButton({
     product,
     onDeleted,
@@ -20,40 +21,23 @@ export default function DeleteMenuButton({
         // เเจ้งเตือนถามก่อนลบ
         const confirmed = window.confirm(`ต้องการลบเมนู "${product.name}" ใช่หรือไม่`);
         if (!confirmed) return;
-        
+
         try {
             // ดึงข้อมูลจาก Products
-            const { error } = await supabase
-                .from("Products")
-                .delete()
-                .eq("id", product.id);
+            const res = await fetch(`${API_BASE}/products/${product.id}`, {
+                method: "DELETE",
+            });
 
-            if (error) {
-                console.error("Delete product error:", error);
-                alert("ลบเมนูไม่สำเร็จ");
+            const result = await res.json();
+
+            if (!res.ok) {
+                console.error("Delete product error:", result);
+                alert(result.message || "ลบเมนูไม่สำเร็จ");
                 return;
-            }
-            
-            // ลบรูปใน product-images
-            if (product.image) {
-                const marker = "/storage/v1/object/public/product-images/";
-                const index = product.image.indexOf(marker);
-
-                if (index !== -1) {
-                    const filePath = product.image.substring(index + marker.length);
-
-                    const { error: storageError } = await supabase.storage
-                        .from("product-images")
-                        .remove([filePath]);
-
-                    if (storageError) {
-                        console.error("Delete image error:", storageError);
-                    }
-                }
             }
 
             alert("ลบเมนูสำเร็จ");
-            onDeleted?.();
+            await onDeleted?.();
         } catch (error) {
             console.error("Unexpected delete error:", error);
             alert("เกิดข้อผิดพลาด");

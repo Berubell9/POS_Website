@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import supabase from "../../utils/supabase";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import PostAddOutlinedIcon from "@mui/icons-material/PostAddOutlined";
 
@@ -9,13 +8,15 @@ type Category = {
 };
 
 type AddMenuButtonProps = {
-    onAdded?: () => void;
+    onAdded?: () => void | Promise<void>;
 };
+
+const API_BASE = "http://localhost:3001/api";
 
 export default function AddMenuButton({ onAdded }: AddMenuButtonProps) {
     // Open Modal
     const [open, setOpen] = useState(false);
-    
+
     // Form States
     const [categories, setCategories] = useState<Category[]>([]);
     const [newProductImageFile, setNewProductImageFile] = useState<File | null>(null);
@@ -34,21 +35,18 @@ export default function AddMenuButton({ onAdded }: AddMenuButtonProps) {
 
     // ดึงข้อมูลจากตาราง Categories ใน supabase
     const fetchCategories = async () => {
-        const { data, error } = await supabase
-            .from("Categories")
-            .select("id, name")
-            .order("id", { ascending: true });
+        try {
+            const res = await fetch(`${API_BASE}/categories`);
 
-        console.log("fetch from table: Categories");
-        console.log("categories data:", data);
-        console.log("categories error:", error);
+            if (!res.ok) {
+                throw new Error("โหลดหมวดหมู่ไม่สำเร็จ");
+            }
 
-        if (error) {
+            const data = await res.json();
+            setCategories(data || []);
+        } catch (error) {
             console.error("Error fetching categories:", error);
-            return;
         }
-
-        setCategories(data || []);
     };
 
     // รีเซ็ตฟอร์มเมื่อกดปุ่มเข้ามาใหม่
@@ -104,55 +102,56 @@ export default function AddMenuButton({ onAdded }: AddMenuButtonProps) {
 
         try {
             setLoading(true);
-            
-            // Upload Image ลงใน Storage (Bucket) ชื่อ product-images
-            const fileExt = newProductImageFile.name.split(".").pop();
-            const fileName = `${Date.now()}-${Math.random()
-                .toString(36)
-                .slice(2)}.${fileExt}`;
-            const filePath = `products/${fileName}`;
 
-            const { error: uploadError } = await supabase.storage
-                .from("product-images")
-                .upload(filePath, newProductImageFile, {
-                    cacheControl: "3600",
-                    upsert: false,
-                });
+            let imageUrl = "";
 
-            if (uploadError) {
-                console.error("Upload image error:", uploadError);
-                alert("อัปโหลดรูปไม่สำเร็จ");
+            // 1) upload รูปผ่าน Express
+            const formData = new FormData();
+            formData.append("image", newProductImageFile);
+
+            const uploadRes = await fetch(`${API_BASE}/product-images`, {
+                method: "POST",
+                body: formData,
+            });
+
+            const uploadResult = await uploadRes.json();
+
+            if (!uploadRes.ok) {
+                console.error("Upload image error:", uploadResult);
+                alert(uploadResult.message || "อัปโหลดรูปไม่สำเร็จ");
                 return;
             }
 
-            // Get Public URL จากใน Storage (Bucket) ชื่อ product-images  
-            const {
-                data: { publicUrl },
-            } = supabase.storage.from("product-images").getPublicUrl(filePath);
-            
-            // Object สำหรับเตรียมข้อมูลเมนูใหม่ก่อนจะส่งเข้า Database
+            imageUrl = uploadResult.publicUrl;
+
+            // 2) ส่งข้อมูลสินค้าไป Express
             const newProductData = {
                 name: newProductName.trim(),
                 price: Number(newProductPrice),
                 category_id: Number(newProductCategoryId),
-                image: publicUrl,
+                image: imageUrl,
                 is_available: true,
             };
 
-            // Insert ข้อมูลทั้งหมดลง Database ชื่อ Products 
-            const { error: insertError } = await supabase
-                .from("Products")
-                .insert([newProductData]);
+            const createRes = await fetch(`${API_BASE}/products`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(newProductData),
+            });
 
-            if (insertError) {
-                console.error("Insert product error:", insertError);
-                alert("เพิ่มเมนูไม่สำเร็จ");
+            const createResult = await createRes.json();
+
+            if (!createRes.ok) {
+                console.error("Insert product error:", createResult);
+                alert(createResult.message || "เพิ่มเมนูไม่สำเร็จ");
                 return;
             }
 
             alert("เพิ่มเมนูสำเร็จ");
             handleClose();
-            onAdded?.();
+            await onAdded?.();
         } catch (error) {
             console.error("Error adding product:", error);
             alert("เกิดข้อผิดพลาด");
@@ -187,7 +186,7 @@ export default function AddMenuButton({ onAdded }: AddMenuButtonProps) {
                     >
                         {/* Header */}
                         <div className="flex items-center ">
-                            <PostAddOutlinedIcon sx={{ fontSize: 28 }}  className="text-pink-400"/>
+                            <PostAddOutlinedIcon sx={{ fontSize: 28 }} className="text-pink-400" />
                             <p className="ml-1 text-2xl font-extrabold">เพิ่มเมนู</p>
                         </div>
 
@@ -210,7 +209,7 @@ export default function AddMenuButton({ onAdded }: AddMenuButtonProps) {
                                     />
                                 )}
                             </div>
-                            
+
                             {/* ชื่อเมนู */}
                             <div>
                                 <label className="block font-bold">ชื่อเมนู</label>
@@ -222,7 +221,7 @@ export default function AddMenuButton({ onAdded }: AddMenuButtonProps) {
                                     className="mt-1 w-full text-gray-500 font-light rounded-md border border-gray-200 p-2 outline-none"
                                 />
                             </div>
-                            
+
                             {/* หมวดหมู่ */}
                             <div>
                                 <label className="block font-bold">หมวดหมู่</label>
@@ -243,7 +242,7 @@ export default function AddMenuButton({ onAdded }: AddMenuButtonProps) {
                                     )}
                                 </select>
                             </div>
-                            
+
                             {/* ราคา */}
                             <div>
                                 <label className="block font-bold">ราคา (บาท)</label>
@@ -265,7 +264,7 @@ export default function AddMenuButton({ onAdded }: AddMenuButtonProps) {
                             >
                                 ยกเลิก
                             </button>
-                            
+
                             {/* ปุ่มบันทึก */}
                             <button
                                 onClick={addProduct}

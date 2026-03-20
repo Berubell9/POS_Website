@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import supabase from "../../utils/supabase";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import EditNoteOutlinedIcon from "@mui/icons-material/EditNoteOutlined";
 
@@ -21,6 +20,8 @@ type EditMenuButtonProps = {
     product: Product;
     onUpdated?: () => void;
 };
+
+const API_BASE = "http://localhost:3001/api";
 
 export default function EditMenuButton({
     product,
@@ -51,20 +52,22 @@ export default function EditMenuButton({
             setNewImageFile(null);
         }
     }, [open, product]);
-    
+
     // ดึงข้อมูลจากตาราง Categories ใน supabase
     const fetchCategories = async () => {
-        const { data, error } = await supabase
-            .from("Categories")
-            .select("id, name")
-            .order("id", { ascending: true });
+        try {
+            // ดึงข้อมูลจากในตาราง Categories จาก supabase
+            const res = await fetch(`${API_BASE}/categories`);
 
-        if (error) {
+            if (!res.ok) {
+                throw new Error("โหลดหมวดหมู่ไม่สำเร็จ");
+            }
+
+            const data = await res.json();
+            setCategories(data || []);
+        } catch (error) {
             console.error("Error fetching categories:", error);
-            return;
         }
-
-        setCategories(data || []);
     };
 
     // เเก้ไขตรงที่ใส่รูปเมื่อมีการเพิ่มรูปเข้ามาใหม่ ให้เอาของเก่าออก เเล้วเเสดงอันใหม่
@@ -99,56 +102,54 @@ export default function EditMenuButton({
 
             let imageUrl = product.image;
 
-            // 1. Upload Image ลงใน Storage (Bucket) ชื่อ product-images
+
             // ถ้ามีเลือกรูปใหม่ ให้อัปโหลดรูปใหม่
             if (newImageFile) {
-                const fileExt = newImageFile.name.split(".").pop();
-                const fileName = `${Date.now()}-${Math.random()
-                    .toString(36)
-                    .slice(2)}.${fileExt}`;
-                const filePath = `products/${fileName}`;
+                const formData = new FormData();
+                formData.append("image", newImageFile);
+                
+                // Upload Image ลงใน Storage (Bucket) ชื่อ product-images
+                const uploadRes = await fetch(`${API_BASE}/product-images`, {
+                    method: "POST",
+                    body: formData,
+                });
 
-                const { error: uploadError } = await supabase.storage
-                    .from("product-images")
-                    .upload(filePath, newImageFile, {
-                        cacheControl: "3600",
-                        upsert: false,
-                    });
+                const uploadResult = await uploadRes.json();
 
-                if (uploadError) {
-                    console.error("Upload image error:", uploadError);
-                    alert("อัปโหลดรูปใหม่ไม่สำเร็จ");
+                if (!uploadRes.ok) {
+                    console.error("Upload image error:", uploadResult);
+                    alert(uploadResult.message || "อัปโหลดรูปใหม่ไม่สำเร็จ");
                     return;
                 }
-                
-                // 2. Get Public URL จากใน Storage (Bucket) ชื่อ product-images 
-                const {
-                    data: { publicUrl },
-                } = supabase.storage.from("product-images").getPublicUrl(filePath);
 
-                imageUrl = publicUrl;
+                imageUrl = uploadResult.publicUrl;
             }
 
-            // 3. Update ข้อมูลทั้งหมดลง Database ชื่อ Products 
-            const { error } = await supabase
-                .from("Products")
-                .update({
+            // ส่งข้อมูลไปที่ backend เพื่อแก้ไขเมนู id
+            const updateRes = await fetch(`${API_BASE}/products/${product.id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
                     name: productName.trim(),
                     price: Number(productPrice),
                     category_id: Number(productCategoryId),
                     image: imageUrl,
-                })
-                .eq("id", product.id);
+                }),
+            });
 
-            if (error) {
-                console.error("Update product error:", error);
-                alert("แก้ไขเมนูไม่สำเร็จ");
+            const updateResult = await updateRes.json();
+
+            if (!updateRes.ok) {
+                console.error("Update product error:", updateResult);
+                alert(updateResult.message || "แก้ไขเมนูไม่สำเร็จ");
                 return;
             }
 
             alert("แก้ไขเมนูสำเร็จ");
             setOpen(false);
-            onUpdated?.();
+            await onUpdated?.();
         } catch (error) {
             console.error("Unexpected update error:", error);
             alert("เกิดข้อผิดพลาด");
@@ -179,7 +180,7 @@ export default function EditMenuButton({
                         onClick={(e) => e.stopPropagation()}
                     >
                         <div className="flex items-center">
-                            <EditNoteOutlinedIcon sx={{ fontSize: 30 }} className="text-pink-400"/>
+                            <EditNoteOutlinedIcon sx={{ fontSize: 30 }} className="text-pink-400" />
                             <p className="ml-1 text-2xl font-extrabold">แก้ไขเมนู</p>
                         </div>
 
@@ -202,7 +203,7 @@ export default function EditMenuButton({
                                     />
                                 )}
                             </div>
-                            
+
                             {/* ชื่อเมนู */}
                             <div>
                                 <label className="block font-bold">ชื่อเมนู</label>
@@ -214,7 +215,7 @@ export default function EditMenuButton({
                                     className="mt-1 w-full text-gray-500 font-light rounded-md border border-gray-200 p-2 outline-none"
                                 />
                             </div>
-                            
+
                             {/* หมวดหมู่ */}
                             <div>
                                 <label className="block font-bold">หมวดหมู่</label>
@@ -231,7 +232,7 @@ export default function EditMenuButton({
                                     ))}
                                 </select>
                             </div>
-                            
+
                             {/* ราคา */}
                             <div>
                                 <label className="block font-bold">ราคา (บาท)</label>
@@ -244,7 +245,7 @@ export default function EditMenuButton({
                                 />
                             </div>
                         </div>
-                        
+
                         <div className="mt-6 flex justify-end gap-3">
                             {/* ปุ่มยกเลิก */}
                             <button

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import supabase from "../../utils/supabase";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
 
@@ -11,10 +10,17 @@ type Product = {
     category_id: number | null;
 };
 
+type Category = {
+  id: number;
+  name: string;
+};
+
 type Props = {
     product: Product;
     onUpdated?: () => void;
 };
+
+const API_BASE = "http://localhost:3001/api";
 
 export default function ShowMenuButton({ product }: Props) {
     // Open Modal
@@ -26,22 +32,25 @@ export default function ShowMenuButton({ product }: Props) {
         if (open) {
             fetchCategories();
         }
-    }, [open]);
+    }, [open, product]);
 
     // ดึง Categories จาก supabase
     const fetchCategories = async () => {
-        const { data, error } = await supabase
-            .from("Categories")
-            .select("id, name");
+        try {
+            const res = await fetch(`${API_BASE}/categories`);
 
-        if (error) {
-            console.error(error);
-            return;
+            if (!res.ok) {
+                throw new Error("โหลดหมวดหมู่ไม่สำเร็จ");
+            }
+
+            const data: Category[] = await res.json();
+
+            const found = data?.find((c) => c.id === product.category_id);
+            setCategoryName(found ? found.name : "-");
+        } catch (error) {
+            console.error("Error fetching categories:", error);
+            setCategoryName("-");
         }
-
-        // ถ้าไม่เจอให้เเสดง -
-        const found = data?.find((c) => c.id === product.category_id);
-        setCategoryName(found ? found.name : "-");
     };
 
     return (
@@ -61,15 +70,15 @@ export default function ShowMenuButton({ product }: Props) {
                 <div
                     className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
                     onClick={() => setOpen(false)}
-                >   
-                {/* พื้นหลังขวา */}
+                >
+                    {/* พื้นหลังขวา */}
                     <div
                         className="w-full max-w-lg rounded-xl bg-white p-6 shadow-lg"
                         onClick={(e) => e.stopPropagation()}
-                    >   
+                    >
                         {/* Header */}
                         <div className="flex items-center">
-                            <ArticleOutlinedIcon sx={{ fontSize: 26 }} className="mr-1 text-pink-400"/>
+                            <ArticleOutlinedIcon sx={{ fontSize: 26 }} className="mr-1 text-pink-400" />
                             <p className="text-2xl font-extrabold">รายละเอียดเมนู</p>
                         </div>
 

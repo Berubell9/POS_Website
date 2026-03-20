@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import supabase from "../../utils/supabase";
 
 type Category = {
     id: number;
@@ -10,6 +9,8 @@ type Props = {
     value: string;
     onChange: (category: string) => void;
 };
+
+const API_BASE = "http://localhost:3001/api";
 
 export default function Tabs({ value, onChange }: Props) {
 
@@ -22,17 +23,18 @@ export default function Tabs({ value, onChange }: Props) {
 
     // ดึงข้อมูล Categories
     const fetchCategories = async () => {
-        const { data, error } = await supabase
-            .from("Categories")
-            .select("id, name")
-            .order("id", { ascending: true });
+        try {
+            const res = await fetch(`${API_BASE}/categories`);
 
-        if (error) {
+            if (!res.ok) {
+                throw new Error("โหลดหมวดหมู่ไม่สำเร็จ");
+            }
+
+            const data: Category[] = await res.json();
+            setCategories(data || []);
+        } catch (error) {
             console.error("Error fetching categories:", error);
-            return;
         }
-
-        setCategories(data || []);
     };
 
     // ให้ id=0 เป็นทั้งหมด

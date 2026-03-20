@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from "react";
-import supabase from "../../utils/supabase";
 import DeleteMenuButton from "./DeleteMenuButton";
 import EditMenuButton from "./EditMenuButton";
 import Pagination from "./Pagination";
@@ -27,6 +26,8 @@ type ProductItemProps = {
     selectedCategory: string;
     onAdded?: () => void;
 };
+
+const API_BASE = "http://localhost:3001/api";
 
 export default function ProductItemTable({
     // props ที่ส่งเข้ามา มาใช้งานใน component
@@ -56,29 +57,24 @@ export default function ProductItemTable({
 
             // ดึงข้อมูลจากในตาราง Products และCategories จาก supabase
             const [productsRes, categoriesRes] = await Promise.all([
-                supabase
-                    .from("Products")
-                    .select("id, name, price, image, category_id")
-                    .order("id", { ascending: true }),
-                supabase
-                    .from("Categories")
-                    .select("id, name")
-                    .order("id", { ascending: true }),
+                fetch(`${API_BASE}/products`),
+                fetch(`${API_BASE}/categories`),
             ]);
 
-            // เช็ก error
-            if (productsRes.error) {
-                console.error("Error fetching products:", productsRes.error);
-                return;
-            }
-            if (categoriesRes.error) {
-                console.error("Error fetching categories:", categoriesRes.error);
-                return;
+            if (!productsRes.ok) {
+                throw new Error("โหลดข้อมูลสินค้าไม่สำเร็จ");
             }
 
-            // เซ็ต state
-            setProducts((productsRes.data as Product[]) || []);
-            setCategories((categoriesRes.data as Category[]) || []);
+            if (!categoriesRes.ok) {
+                throw new Error("โหลดข้อมูลหมวดหมู่ไม่สำเร็จ");
+            }
+
+            const productsData = await productsRes.json();
+            const categoriesData = await categoriesRes.json();
+
+            // Set state
+            setProducts(productsData || []);
+            setCategories(categoriesData || []);
             setCurrentPage(1);
         } catch (error) {
             console.error("Unexpected fetch error:", error);
@@ -100,7 +96,7 @@ export default function ProductItemTable({
             // ค้นหาจากชื่อสินค้า
             const matchSearch =
                 product.name.toLowerCase().includes(searchTerm.toLowerCase());
-            
+
             // ค้นหาจากชื่อหมวดหมู่
             const categoryName =
                 product.category_id ? categoryMap[product.category_id] || "" : "";
@@ -114,7 +110,7 @@ export default function ProductItemTable({
             return matchSearch && matchCategory;
         });
     }, [products, searchTerm, selectedCategory, categoryMap]);
-    
+
     // คำนวณจำนวนหน้าทั้งหมด
     const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
 
@@ -146,7 +142,7 @@ export default function ProductItemTable({
                             }}
                         />
                     </div>
-                    <AddMenuButton onAdded={fetchData}/>
+                    <AddMenuButton onAdded={fetchData} />
                 </div>
             </div>
 
@@ -173,50 +169,50 @@ export default function ProductItemTable({
                     )}
 
                     {!loading && currentProducts.map((product, index) => (
-                            // รายการเมนู
-                            <tr key={product.id} className="border-t border-gray-100">
-                                {/* ลำดับ */}
-                                <td className="hidden sm:table-cell px-4 py-3 text-left">
-                                    {(currentPage - 1) * itemsPerPage + index + 1}
-                                </td>
+                        // รายการเมนู
+                        <tr key={product.id} className="border-t border-gray-100">
+                            {/* ลำดับ */}
+                            <td className="hidden sm:table-cell px-4 py-3 text-left">
+                                {(currentPage - 1) * itemsPerPage + index + 1}
+                            </td>
 
-                                {/* รูปภาพ */}
-                                <td className="hidden lg:table-cell px-4 py-3 justify-center">
-                                    <img
-                                        src={product.image}
-                                        alt={product.name}
-                                        className="h-14 w-14 rounded-md object-cover"
-                                    />
-                                </td>
+                            {/* รูปภาพ */}
+                            <td className="hidden lg:table-cell px-4 py-3 justify-center">
+                                <img
+                                    src={product.image}
+                                    alt={product.name}
+                                    className="h-14 w-14 rounded-md object-cover"
+                                />
+                            </td>
 
-                                {/* ชื่อเมนู */}
-                                <td className="px-4 py-3 text-left">{product.name}</td>
-                                
-                                {/* หมวดหมู่ */}
-                                <td className="hidden lg:table-cell px-4 py-3 text-left">
-                                    {product.category_id
-                                        ? categoryMap[product.category_id] || "-"
-                                        : "-"}
-                                </td>
+                            {/* ชื่อเมนู */}
+                            <td className="px-4 py-3 text-left">{product.name}</td>
 
-                                {/* ราคา */}
-                                <td className="hidden sm:table-cell px-4 py-3 text-center">฿{product.price}</td>
-                                
-                                {/* จัดการ */}
-                                <td className="px-4 py-3">
-                                    <div className="flex items-center justify-center gap-2">
-                                        {/* ปุ่มเเสดงเมนู */}
-                                        <ShowMenuButton product={product} onUpdated={fetchData} />
-                                        
-                                        {/* ปุ่มเเก้ไขเมนู */}
-                                        <EditMenuButton product={product} onUpdated={fetchData} />
-                                        
-                                        {/* ปุ่มลบเมนู */}
-                                        <DeleteMenuButton product={product} onDeleted={fetchData}/>
-                                    </div>
-                                </td>
-                            </tr>
-                        ))}
+                            {/* หมวดหมู่ */}
+                            <td className="hidden lg:table-cell px-4 py-3 text-left">
+                                {product.category_id
+                                    ? categoryMap[product.category_id] || "-"
+                                    : "-"}
+                            </td>
+
+                            {/* ราคา */}
+                            <td className="hidden sm:table-cell px-4 py-3 text-center">฿{product.price}</td>
+
+                            {/* จัดการ */}
+                            <td className="px-4 py-3">
+                                <div className="flex items-center justify-center gap-2">
+                                    {/* ปุ่มเเสดงเมนู */}
+                                    <ShowMenuButton product={product} onUpdated={fetchData} />
+
+                                    {/* ปุ่มเเก้ไขเมนู */}
+                                    <EditMenuButton product={product} onUpdated={fetchData} />
+
+                                    {/* ปุ่มลบเมนู */}
+                                    <DeleteMenuButton product={product} onDeleted={fetchData} />
+                                </div>
+                            </td>
+                        </tr>
+                    ))}
 
                     {/* ถ้าค้นหาไม่เจอ หรือมีมีข้อมูลใน Database จะ "ไม่พบเมนู" */}
                     {!loading && filteredProducts.length === 0 && (
@@ -228,7 +224,7 @@ export default function ProductItemTable({
                     )}
                 </tbody>
             </table>
-            
+
             {/* เมื่อเมนูเกินจะเเบ่งเมนูไปอีกหน้า พร้อมเเสดงปุ่มให้กดหน้าถัดไป */}
             <Pagination
                 currentPage={currentPage}
