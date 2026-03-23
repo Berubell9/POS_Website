@@ -2,19 +2,6 @@ import supabase from "../services/supabase.js";
 
 export const createOrder = async (req, res) => {
     try {
-        // หา queue ล่าสุด
-        const { data: lastOrder } = await supabase
-            .from("Orders")
-            .select("queue_number")
-            .order("queue_number", { ascending: false })
-            .limit(1)
-            .single();
-
-        // ถ้าไม่มี order มาก่อน → เริ่มที่ 1
-        const nextQueue = lastOrder?.queue_number
-            ? lastOrder.queue_number + 1
-            : 1;
-
         const { table_id, subtotal, vat, total, items } = req.body;
 
         if (!table_id) {
@@ -28,6 +15,36 @@ export const createOrder = async (req, res) => {
                 message: "Order items are required",
             });
         }
+
+        // หา queue ล่าสุดของ "วันนี้"
+        const now = new Date();
+
+        const startOfDay = new Date(now);
+        startOfDay.setHours(0, 0, 0, 0);
+
+        const endOfDay = new Date(now);
+        endOfDay.setHours(23, 59, 59, 999);
+
+        const { data: todayOrders, error: queueError } = await supabase
+            .from("Orders")
+            .select("queue_number")
+            .gte("created_at", startOfDay.toISOString())
+            .lte("created_at", endOfDay.toISOString())
+            .order("queue_number", { ascending: false })
+            .limit(1);
+
+        if (queueError) {
+            console.error("queueError:", queueError);
+            return res.status(500).json({
+                message: "Failed to generate queue number",
+                error: queueError.message,
+            });
+        }
+
+        const nextQueue =
+            todayOrders && todayOrders.length > 0
+                ? todayOrders[0].queue_number + 1
+                : 1;
 
         const orderNumber = `ORD-${Date.now()}`;
 
@@ -96,24 +113,26 @@ export const getOrders = async (req, res) => {
     try {
         const { data, error } = await supabase
             .from("Orders")
-            .select(`*,
+            .select(`
+                *,
                 tables:table_id (
-                    id,
-                    table_number
-                ),
+                id,
+                table_number
+            ),
                 items:Order_Item (
-                    id,
-                    product_id,
-                    product_name,
-                    product_image,
-                    unit_price,
-                    quantity,
-                    total
+                id,
+                product_id,
+                product_name,
+                product_image,
+                unit_price,
+                quantity,
+                total
                 )
             `)
             .order("id", { ascending: false });
 
         if (error) {
+            console.error("getOrders error:", error);
             return res.status(500).json({
                 message: "Failed to fetch orders",
                 error: error.message,
