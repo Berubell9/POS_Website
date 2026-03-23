@@ -9,25 +9,25 @@ export default function Tabs() {
         { label: "กำลังทำ", },
         { label: "พร้อมเสิร์ฟ", },
         { label: "เสร็จสิ้น", },
-        { label: "ยกเลิก",}
+        { label: "ยกเลิก", }
     ];
 
     return (
-        <div className="mt-5 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3">
-            {/* เลือกหมวดหมู่ */}
-            {tabs.map((tab) => (
+        <div className='mt-4 p-4 bg-white rounded-lg shadow-sm'>
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3">            {tabs.map((tab) => (
                 <button
                     key={tab.label}
                     onClick={() => setActiveTab(tab.label)}
-                    className={`flex items-center justify-center gap-1 py-2 rounded-3xl shadow-sm transition
-            ${activeTab === tab.label
-                            ? "bg-gray-800 text-white"
-                            : "bg-white text-gray-500 border border-gray-300 hover:bg-gray-50"
+                    className={`px-4 py-2 rounded-md transition
+                    ${activeTab === tab.label
+                            ? "bg-pink-400 text-white"
+                            : "bg-pink-50 text-pink-400 border border-pink-300 hover:bg-pink-100"
                         }`}
                 >
                     {tab.label}
                 </button>
             ))}
+            </div>
         </div>
     );
 }

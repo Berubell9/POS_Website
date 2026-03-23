@@ -1,15 +1,23 @@
 import SearchIcon from '@mui/icons-material/Search';
 
-export default function SearchBar() {
+type Props = {
+    value: string;
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+};
+
+export default function SearchBar({ value, onChange }: Props) {
     return (
-        <div className="flex w-full border border-gray-200 rounded-md bg-white items-center shadow-sm">
-            {/* ค้นหาออเดอร์ */}
-            <SearchIcon sx={{ fontSize: 20 }} className='ml-3 text-gray-500' />
-            <input
-                type="text"
-                placeholder="ค้นหาออเดอร์"
-                className="pl-2 p-3 text-md w-full h-full outline-none focus:outline-none focus:ring-0"
-            />        
+        <div className='mt-4 p-4 bg-white rounded-lg shadow-sm'>
+            <div className="flex items-center w-full border border-gray-200 rounded-md bg-white px-3">
+                <SearchIcon sx={{ fontSize: 20 }} className="text-gray-500 mr-2" />
+                <input
+                    type="text"
+                    placeholder="ค้นหาออเดอร์..."
+                    value={value}
+                    onChange={onChange}
+                    className="w-full py-2 outline-none"
+                />
+            </div>
         </div>
-    )
+    );
 }

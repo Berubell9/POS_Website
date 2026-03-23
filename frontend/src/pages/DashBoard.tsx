@@ -1,14 +1,20 @@
-
+import AssessmentOutlinedIcon from "@mui/icons-material/AssessmentOutlined";
 
 export default function DashBoard() {
     return (
         <div className="flex h-full text-gray-800 relative">
-            <div className="flex-1 p-6 pb-6 overflow-y-auto">
+            <div className="flex-1 p-4 pb-6 overflow-y-auto">
                 {/* Header */}
-                <p className="text-3xl font-extrabold mb-5">ยอดขาย</p>
-
+                <div className="flex items-center p-4 bg-white rounded-xl shadow-sm">
+                    <div className="mr-4 p-2 items-center bg-pink-400 rounded-md text-white shadow-sm">
+                        <AssessmentOutlinedIcon sx={{ fontSize: 30 }} />
+                    </div>
+                    <p className="text-3xl font-extrabold">ยอดขาย</p>
+                </div>
+                
                 {/* Content */}
+              
             </div>
-        </div>
+        </div >
     )
 }

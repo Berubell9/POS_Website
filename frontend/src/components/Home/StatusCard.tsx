@@ -5,7 +5,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 export default function Card() {
     return (
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+        <div className="mt-4 grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
             {/* ยอดขายวันนี้ */}
             <div className="bg-white p-4 min-h-25 shadow-sm rounded-xl">
                 <div className="flex items-center gap-2 mb-2">

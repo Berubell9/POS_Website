@@ -1,8 +1,9 @@
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
+import LocalPrintshopOutlinedIcon from '@mui/icons-material/LocalPrintshopOutlined';
 
 export default function OrderCard() {
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mt-5">
+        <div className=" mt-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
             <div className="bg-white rounded-2xl shadow-sm p-4 flex flex-col h-full">
                 {/* วันที่ เวลา */}
                 <div className="flex items-center justify-between text-xs text-gray-400">
@@ -10,10 +11,10 @@ export default function OrderCard() {
                     <p>11:00</p>
                 </div>
 
-                {/* เลขออเดอร์ + สถานะ */}
+                {/* คิว + สถานะ */}
                 <div className="flex items-start justify-between gap-3 mt-2">
                     <p className="font-extrabold text-xl text-gray-800 wrap-break-words">
-                        เลขออเดอร์ #A001
+                        คิวที่ #A001
                     </p>
 
                     <div className="shrink-0 flex items-center gap-1 text-sm text-yellow-800 px-2 py-1 bg-yellow-100 rounded-full whitespace-nowrap">
@@ -75,8 +76,9 @@ export default function OrderCard() {
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-2">
                     <button
                         type="button"
-                        className="w-full py-2 rounded-lg border border-pink-300 bg-pink-50 text-pink-500 text-sm font-medium shadow-sm hover:bg-pink-100 transition"
+                        className="w-full py-2 items-center rounded-lg border border-pink-300 bg-pink-50 text-pink-400 text-sm font-medium shadow-sm hover:bg-pink-100 transition"
                     >
+                        <LocalPrintshopOutlinedIcon sx={{ fontSize: 18 }} className="mr-1"/>
                         ใบเสร็จ
                     </button>
 

@@ -3,12 +3,12 @@ import NoMealsIcon from '@mui/icons-material/NoMeals';
 
 export default function OrderCard() {
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-5 text-gray-800 pb-6">
+        <div className="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-4 text-gray-800 pb-6">
             {/* ออเดอร์ที่รอดำเนินการ */}
             <div className="w-full">
                 <div className="flex items-center">
                     <CircleIcon sx={{ fontSize: 12 }} className="text-yellow-500" />
-                    <p className="ml-2 font-extrabold">รอดำเนินการ</p>
+                    <p className="ml-2 text-lg font-extrabold">รอดำเนินการ</p>
                     {/* จำนวนออเดอร์ */}
                     <p className="text-sm text-yellow-800 ml-2 px-2 py-1 bg-yellow-200 rounded-2xl">
                         1
@@ -18,7 +18,7 @@ export default function OrderCard() {
                 {/* Order Card */}
                 <div className='mt-2 space-y-2'>
                     <div className="min-h-30 p-4 bg-white rounded-xl shadow-sm flex flex-col">
-                        <p className='font-extrabold text-xl wrap-break-word'>เลขออเดอร์</p>
+                        <p className='font-extrabold text-xl wrap-break-word'>เลขคิว</p>
                         <p className='text-gray-400 mt-1 text-sm text-thin'><span>โต๊ะ : </span>หมายเลขโต๊ะ</p>
                         {/* แสดงรายการทั้งหมด */}
                         <div className='space-y-2'>
@@ -36,14 +36,14 @@ export default function OrderCard() {
                             </div>
                         </div>
                         {/* ปุ่มไปขั้นตอนถัดไป */}
-                        <button type="button" className="text-white bg-pink-400 mt-2 hover:bg-pink-500 shadow-sm font-medium rounded-lg text-sm px-4 py-2.5">
+                        <button type="button" className="text-pink-400 border border-pink-400 bg-pink-50 mt-2 hover:bg-pink-100 shadow-sm font-medium rounded-lg text-sm px-4 py-2.5">
                             ขั้นตอนถัดไป
                         </button>
                     </div>
 
                     {/* ตัวอย่างถ้ามี 2 ออเดอร์ */}
                     <div className="min-h-30 p-4 bg-white rounded-xl shadow-sm flex flex-col">
-                        <p className='font-extrabold text-xl'>เลขออเดอร์</p>
+                        <p className='font-extrabold text-xl'>เลขคิว</p>
                         <p className='text-gray-400 mt-1 text-sm text-thin'><span>โต๊ะ : </span>หมายเลขโต๊ะ</p>
                         {/* แสดงรายการทั้งหมด */}
                         <div className='space-y-2'>
@@ -61,7 +61,7 @@ export default function OrderCard() {
                             </div>
                         </div>
                         {/* ปุ่มไปขั้นตอนถัดไป */}
-                        <button type="button" className="text-white bg-pink-400 mt-2 hover:bg-pink-500 focus:ring-4 focus:ring-pink-300 shadow-sm font-medium rounded-lg text-sm px-4 py-2.5 focus:outline-none">
+                        <button type="button" className="text-pink-400 border border-pink-400 bg-pink-50 mt-2 hover:bg-pink-100 shadow-sm font-medium rounded-lg text-sm px-4 py-2.5">
                             ขั้นตอนถัดไป
                         </button>
                     </div>
@@ -72,7 +72,7 @@ export default function OrderCard() {
             <div className="w-full">
                 <div className="flex items-center">
                     <CircleIcon sx={{ fontSize: 12 }} className="text-sky-500" />
-                    <p className="ml-2 font-extrabold">กำลังทำ</p>
+                    <p className="ml-2 text-lg font-extrabold">กำลังทำ</p>
                     {/* จำนวนออเดอร์ */}
                     <p className="text-sm text-sky-800 ml-2 px-2 py-1 bg-sky-200 rounded-2xl">
                         0
@@ -90,7 +90,7 @@ export default function OrderCard() {
             <div className="w-full">
                 <div className="flex items-center">
                     <CircleIcon sx={{ fontSize: 12 }} className="text-green-500" />
-                    <p className="ml-2 font-extrabold">พร้อมเสิร์ฟ</p>
+                    <p className="ml-2 text-lg font-extrabold">พร้อมเสิร์ฟ</p>
                     {/* จำนวนออเดอร์ */}
                     <p className="text-sm text-green-800 ml-2 px-2 py-1 bg-green-200 rounded-2xl">
                         0
