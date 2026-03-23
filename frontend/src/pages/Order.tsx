@@ -1,3 +1,4 @@
+import { useState } from "react";
 import OrderCard from "../components/Order/OrderCard";
 import SearchBar from "../components/Order/SearchBar";
 import Tabs from "../components/Order/Tabs";
@@ -6,9 +7,11 @@ import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import FormatListBulletedOutlinedIcon from '@mui/icons-material/FormatListBulletedOutlined';
 
 export default function Order() {
+    const [searchTerm, setSearchTerm] = useState("");
+
     return (
         <div className="flex h-full text-gray-800 relative">
-            <div className="flex-1 p-6 pb-6 overflow-y-auto">
+            <div className="flex-1 p-4 pb-6 overflow-y-auto">
                 {/* Header */}
                 <div className="flex items-center p-4 bg-white rounded-xl shadow-sm">
                     <div className="mr-4 p-2 items-center bg-pink-400 rounded-md text-white shadow-sm">
@@ -24,7 +27,10 @@ export default function Order() {
                     <p className="text-xl font-extrabold">รายการออเดอร์</p>
                 </div>
 
-                <SearchBar />
+                <SearchBar
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
 
                 <OrderCard />
             </div>

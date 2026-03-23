@@ -3,7 +3,7 @@ import NoMealsIcon from '@mui/icons-material/NoMeals';
 
 export default function OrderCard() {
     return (
-        <div className="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-4 text-gray-800 pb-6">
+        <div className="mt-6 space-y-6 grid grid-cols-1 lg:grid-cols-3 gap-4 text-gray-800 pb-6">
             {/* ออเดอร์ที่รอดำเนินการ */}
             <div className="w-full">
                 <div className="flex items-center">
@@ -36,7 +36,7 @@ export default function OrderCard() {
                             </div>
                         </div>
                         {/* ปุ่มไปขั้นตอนถัดไป */}
-                        <button type="button" className="text-pink-400 border border-pink-400 bg-pink-50 mt-2 hover:bg-pink-100 shadow-sm font-medium rounded-lg text-sm px-4 py-2.5">
+                        <button type="button" className="text-pink-400 border border-pink-300 bg-pink-50 mt-2 hover:bg-pink-100 shadow-sm font-medium rounded-lg text-sm px-4 py-2.5">
                             ขั้นตอนถัดไป
                         </button>
                     </div>
@@ -61,7 +61,7 @@ export default function OrderCard() {
                             </div>
                         </div>
                         {/* ปุ่มไปขั้นตอนถัดไป */}
-                        <button type="button" className="text-pink-400 border border-pink-400 bg-pink-50 mt-2 hover:bg-pink-100 shadow-sm font-medium rounded-lg text-sm px-4 py-2.5">
+                        <button type="button" className="text-pink-400 border border-pink-300 bg-pink-50 mt-2 hover:bg-pink-100 shadow-sm font-medium rounded-lg text-sm px-4 py-2.5">
                             ขั้นตอนถัดไป
                         </button>
                     </div>

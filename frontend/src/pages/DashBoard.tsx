@@ -1,4 +1,6 @@
+import { useState } from "react";
 import AssessmentOutlinedIcon from "@mui/icons-material/AssessmentOutlined";
+import StatusCard from "../components/Dashboard/StatusCard";
 
 export default function DashBoard() {
     return (
@@ -13,7 +15,12 @@ export default function DashBoard() {
                 </div>
                 
                 {/* Content */}
-              
+                <StatusCard/>
+                {/* ยอดขายรายวัน
+                ยอกขายรายเดือน
+                เมนูขายดี 
+                
+                */}
             </div>
         </div >
     )
