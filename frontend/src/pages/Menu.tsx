@@ -165,7 +165,8 @@ export default function Menu() {
                 total,
                 items: orderItems.map((item) => ({
                     product_id: item.productId,
-                    product_name_snapshot: item.name,
+                    product_name: item.name,
+                    product_image: item.image,
                     qty: item.qty,
                     unit_price: item.price,
                     line_total: item.price * item.qty,

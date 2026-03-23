@@ -1,108 +1,80 @@
-import CircleIcon from '@mui/icons-material/Circle';
-import NoMealsIcon from '@mui/icons-material/NoMeals';
+type OrderItem = {
+    id: number;
+    product_id: number;
+    product_name: string;
+    product_image: string;
+    unit_price: number;
+    quantity: number;
+    total: number;
+};
 
-export default function OrderCard() {
+type OrderCardProps = {
+    queueNumber: string;
+    tableNumber: string;
+    items: OrderItem[];
+    actionLabel: string;
+    actionVariant?: "pink" | "sky" | "green";
+    onAction?: () => void;
+};
+
+const actionClassMap: Record<NonNullable<OrderCardProps["actionVariant"]>, string> = {
+    pink: "border-pink-300 bg-pink-50 text-pink-400 hover:bg-pink-100",
+    sky: "border-sky-300 bg-sky-50 text-sky-400 hover:bg-sky-100",
+    green: "border-green-300 bg-green-50 text-green-500 hover:bg-green-100",
+};
+
+export default function OrderCard({
+    queueNumber,
+    tableNumber,
+    items,
+    actionLabel,
+    actionVariant = "pink",
+    onAction,
+}: OrderCardProps) {
     return (
-        <div className="mt-6 space-y-6 grid grid-cols-1 lg:grid-cols-3 gap-4 text-gray-800 pb-6">
-            {/* ออเดอร์ที่รอดำเนินการ */}
-            <div className="w-full">
-                <div className="flex items-center">
-                    <CircleIcon sx={{ fontSize: 12 }} className="text-yellow-500" />
-                    <p className="ml-2 text-lg font-extrabold">รอดำเนินการ</p>
-                    {/* จำนวนออเดอร์ */}
-                    <p className="text-sm text-yellow-800 ml-2 px-2 py-1 bg-yellow-200 rounded-2xl">
-                        1
-                    </p>
-                </div>
+        <div className="flex min-h-30 flex-col rounded-xl bg-white p-4 shadow-sm">
+            <p className="warp-break-words text-xl font-extrabold text-gray-800">
+                คิวที่ {queueNumber}
+            </p>
 
-                {/* Order Card */}
-                <div className='mt-2 space-y-2'>
-                    <div className="min-h-30 p-4 bg-white rounded-xl shadow-sm flex flex-col">
-                        <p className='font-extrabold text-xl wrap-break-word'>เลขคิว</p>
-                        <p className='text-gray-400 mt-1 text-sm text-thin'><span>โต๊ะ : </span>หมายเลขโต๊ะ</p>
-                        {/* แสดงรายการทั้งหมด */}
-                        <div className='space-y-2'>
-                            {/* box เเต่ละรายการ */}
-                            <div className='flex w-full mt-2 items-center bg-gray-100 rounded-md p-2'>
-                                <img src='test.jpg' className='h-10 object-contain rounded-md'></img>
-                                <p className='ml-2 truncate'>ชื่อเมนู bbbbbbbbbbbbbbbbbbbbbbbbb</p>
-                                <p className='ml-2 text-sm text-pink-800 px-2 py-1 bg-pink-200 rounded-2xl'>x2</p>
-                            </div>
-                            {/* ตัวอย่าง box เเต่ละรายการ */}
-                            <div className='flex w-full mt-2 items-center bg-gray-100 rounded-md p-2'>
-                                <img src='test.jpg' className='h-10 object-contain rounded-md'></img>
-                                <p className='ml-2 truncate'>ชื่อเมนู</p>
-                                <p className='ml-2 text-sm text-pink-800 px-2 py-1 bg-pink-200 rounded-2xl'>x2</p>
-                            </div>
-                        </div>
-                        {/* ปุ่มไปขั้นตอนถัดไป */}
-                        <button type="button" className="text-pink-400 border border-pink-300 bg-pink-50 mt-2 hover:bg-pink-100 shadow-sm font-medium rounded-lg text-sm px-4 py-2.5">
-                            ขั้นตอนถัดไป
-                        </button>
+            <p className="mt-1 text-sm font-light text-gray-400">
+                <span>โต๊ะ : </span>
+                {tableNumber}
+            </p>
+
+            <div className="mt-2 space-y-2">
+                {items.map((item) => (
+                    <div
+                        key={item.id}
+                        className="flex w-full items-center rounded-md bg-gray-100 p-2"
+                    >
+                        <img
+                            src={item.product_image || "/no-image.png"}
+                            alt={item.product_name}
+                            className="h-10 w-10 rounded-md object-cover"
+                            onError={(e) => {
+                                e.currentTarget.src = "/no-image.png";
+                            }}
+                        />
+
+                        <p className="ml-2 min-w-0 flex-1 truncate text-sm text-gray-800">
+                            {item.product_name}
+                        </p>
+
+                        <p className="ml-2 rounded-2xl bg-pink-200 px-2 py-1 text-sm text-pink-800">
+                            x{item.quantity}
+                        </p>
                     </div>
-
-                    {/* ตัวอย่างถ้ามี 2 ออเดอร์ */}
-                    <div className="min-h-30 p-4 bg-white rounded-xl shadow-sm flex flex-col">
-                        <p className='font-extrabold text-xl'>เลขคิว</p>
-                        <p className='text-gray-400 mt-1 text-sm text-thin'><span>โต๊ะ : </span>หมายเลขโต๊ะ</p>
-                        {/* แสดงรายการทั้งหมด */}
-                        <div className='space-y-2'>
-                            {/* box รายการ */}
-                            <div className='flex mt-2 items-center bg-gray-100 rounded-md p-2'>
-                                <img src='test.jpg' className='h-10 object-contain rounded-md'></img>
-                                <p className='ml-2'>ชื่อเมนู</p>
-                                <p className='ml-2 text-sm text-gray-800 px-2 py-1 bg-pink-200 rounded-2xl'>x2</p>
-                            </div>
-                            {/* ตัวอย่าง box รายการ */}
-                            <div className='flex mt-2 items-center bg-gray-100 rounded-md p-2'>
-                                <img src='test.jpg' className='h-10 object-contain rounded-md'></img>
-                                <p className='ml-2'>ชื่อเมนู</p>
-                                <p className='ml-2 text-sm text-gray-800 px-2 py-1 bg-pink-200 rounded-2xl'>x2</p>
-                            </div>
-                        </div>
-                        {/* ปุ่มไปขั้นตอนถัดไป */}
-                        <button type="button" className="text-pink-400 border border-pink-300 bg-pink-50 mt-2 hover:bg-pink-100 shadow-sm font-medium rounded-lg text-sm px-4 py-2.5">
-                            ขั้นตอนถัดไป
-                        </button>
-                    </div>
-                </div>
+                ))}
             </div>
 
-            {/* ออเดอร์ที่กำลังทำ */}
-            <div className="w-full">
-                <div className="flex items-center">
-                    <CircleIcon sx={{ fontSize: 12 }} className="text-sky-500" />
-                    <p className="ml-2 text-lg font-extrabold">กำลังทำ</p>
-                    {/* จำนวนออเดอร์ */}
-                    <p className="text-sm text-sky-800 ml-2 px-2 py-1 bg-sky-200 rounded-2xl">
-                        0
-                    </p>
-                </div>
-
-                {/* Order Card */}
-                <div className="min-h-30 p-4 mt-2 bg-white text-center text-gray-400 rounded-xl shadow-sm flex flex-col items-center justify-center">
-                    <NoMealsIcon sx={{ fontSize: 40 }} />
-                    <p className="mt-2">ไม่มีออเดอร์</p>
-                </div>
-            </div>
-
-            {/* ออเดอร์ที่เสร็จพร้อมเสิร์ฟ */}
-            <div className="w-full">
-                <div className="flex items-center">
-                    <CircleIcon sx={{ fontSize: 12 }} className="text-green-500" />
-                    <p className="ml-2 text-lg font-extrabold">พร้อมเสิร์ฟ</p>
-                    {/* จำนวนออเดอร์ */}
-                    <p className="text-sm text-green-800 ml-2 px-2 py-1 bg-green-200 rounded-2xl">
-                        0
-                    </p>
-                </div>
-
-                {/* Order Card */}
-                <div className="min-h-30 p-4 mt-2 bg-white text-center text-gray-400 rounded-xl shadow-sm flex flex-col items-center justify-center">
-                    <NoMealsIcon sx={{ fontSize: 40 }} />
-                    <p className="mt-2">ไม่มีออเดอร์</p>
-                </div>
-            </div>
+            <button
+                type="button"
+                onClick={onAction}
+                className={`mt-3 rounded-lg border px-4 py-2.5 text-sm font-medium shadow-sm transition ${actionClassMap[actionVariant]}`}
+            >
+                {actionLabel}
+            </button>
         </div>
-    )
+    );
 }

@@ -60,7 +60,8 @@ export const createOrder = async (req, res) => {
         const orderItemsPayload = items.map((item) => ({
             order_id: orderData.id,
             product_id: item.product_id,
-            product_name_snapshot: item.product_name_snapshot,
+            product_name: item.product_name,
+            product_image: item.product_image,
             unit_price: item.unit_price,
             quantity: item.qty,
             total: item.line_total,
@@ -103,7 +104,8 @@ export const getOrders = async (req, res) => {
                 items:Order_Item (
                     id,
                     product_id,
-                    product_name_snapshot,
+                    product_name,
+                    product_image,
                     unit_price,
                     quantity,
                     total

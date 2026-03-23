@@ -4,7 +4,7 @@ import LocalPrintshopOutlinedIcon from "@mui/icons-material/LocalPrintshopOutlin
 type OrderItem = {
     id: number;
     product_id: number;
-    product_name_snapshot: string;
+    product_name: string;
     unit_price: number;
     quantity: number;
     total: number;
@@ -86,7 +86,7 @@ export default function OrderCard({
             <div className="mt-4 max-h-48 space-y-2 overflow-y-auto pr-1">
                 {items.length === 0 ? (
                     <div className="py-6 text-center text-sm text-gray-400">
-                        ไม่มีรายการสินค้า
+                        ไม่มีรายการเมนู
                     </div>
                 ) : (
                     items.map((item) => (
@@ -96,7 +96,7 @@ export default function OrderCard({
                         >
                             <div className="flex min-w-0 items-center gap-2">
                                 <p className="truncate text-sm text-gray-800">
-                                    {item.product_name_snapshot}
+                                    {item.product_name}
                                 </p>
                                 <p className="rounded-full bg-pink-100 px-2 py-1 text-xs text-pink-800 whitespace-nowrap">
                                     x{item.quantity}

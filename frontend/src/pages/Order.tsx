@@ -10,7 +10,7 @@ import FormatListBulletedOutlinedIcon from "@mui/icons-material/FormatListBullet
 type OrderItem = {
     id: number;
     product_id: number;
-    product_name_snapshot: string;
+    product_name: string;
     unit_price: number;
     quantity: number;
     total: number;
@@ -183,11 +183,11 @@ export default function Order() {
                 </div>
 
                 {loading ? (
-                    <div className="mt-4 rounded-xl bg-white py-10 text-center text-gray-400 shadow-sm">
+                    <div className="mt-4 text-xl rounded-xl bg-white py-10 text-center text-gray-400 shadow-sm">
                         กำลังโหลดข้อมูล...
                     </div>
                 ) : filteredOrders.length === 0 ? (
-                    <div className="mt-4 rounded-xl bg-white py-10 text-center text-gray-400 shadow-sm">
+                    <div className="mt-4 text-xl rounded-xl bg-white py-10 text-center text-gray-400 shadow-sm">
                         ไม่พบรายการออเดอร์
                     </div>
                 ) : (

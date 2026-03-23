@@ -67,8 +67,8 @@ export default function CurrentOrder({
     const orderList = (
         <div className="mt-5 flex-1 overflow-y-auto">
             {items.length === 0 ? (
-                <div className="flex h-full items-center justify-center text-gray-300">
-                    ยังไม่มีรายการสินค้า
+                <div className="flex h-full items-center justify-center text-gray-400">
+                    ยังไม่มีรายการเมนู
                 </div>
             ) : (
                 <div className="space-y-2">
