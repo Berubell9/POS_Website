@@ -162,7 +162,7 @@ export default function ProductItemTable({
                 <tbody>
                     {loading && (
                         <tr>
-                            <td colSpan={6} className="py-8 text-center text-gray-400">
+                            <td colSpan={6} className="py-8 text-center text-gray-400 text-xl">
                                 กำลังโหลดข้อมูล...
                             </td>
                         </tr>
@@ -217,7 +217,7 @@ export default function ProductItemTable({
                     {/* ถ้าค้นหาไม่เจอ หรือมีมีข้อมูลใน Database จะ "ไม่พบเมนู" */}
                     {!loading && filteredProducts.length === 0 && (
                         <tr>
-                            <td colSpan={6} className="py-8 text-center text-gray-400">
+                            <td colSpan={6} className="py-8 text-center text-xl text-gray-400">
                                 ไม่พบเมนู
                             </td>
                         </tr>

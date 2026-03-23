@@ -29,7 +29,7 @@ const navClass = ({ isActive }: { isActive: boolean }) =>
 
 const SideBar = () => {
   return (
-    <div className="h-full w-16 md:w-60 bg-white p-2 py-4 md:p-4 text-gray-800 shadow-xl transition-all">
+    <div className="h-full w-16 md:w-60 bg-white p-2 py-4 md:py-6 md:px-4 text-gray-800 shadow-xl transition-all">
       {/* Header */}
       <div className="flex items-center gap-3 border-b border-gray-200 px-2 pb-4">
         <img src="/crepe.png" className="h-10 w-10 object-contain" />

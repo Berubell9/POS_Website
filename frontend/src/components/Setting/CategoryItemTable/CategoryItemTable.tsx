@@ -140,7 +140,7 @@ export default function CategoryItemTable({
                 <tbody>
                     {loading && (
                         <tr>
-                            <td colSpan={4} className="py-8 text-center text-gray-400">
+                            <td colSpan={4} className="py-8 text-xl text-center text-gray-400">
                                 กำลังโหลดข้อมูล...
                             </td>
                         </tr>
@@ -177,7 +177,7 @@ export default function CategoryItemTable({
                     {/* ถ้าค้นหาไม่เจอ หรือมีมีข้อมูลใน Database จะ "ไม่พบหมวดหมู่" */}
                     {!loading && filteredCategories.length === 0 && (
                         <tr>
-                            <td colSpan={4} className="py-8 text-center text-gray-400">
+                            <td colSpan={4} className="py-8 text-xl text-center text-gray-400">
                                 ไม่พบหมวดหมู่
                             </td>
                         </tr>

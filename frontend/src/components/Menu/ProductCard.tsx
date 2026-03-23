@@ -101,7 +101,7 @@ export default function ProductCard({
 
     if (loading) {
         return (
-            <div className="mt-10 text-center text-gray-400">
+            <div className="mt-4 py-10 px-4 text-xl text-center text-gray-400 bg-white rounded-lg shadow-sm">
                 กำลังโหลดข้อมูล...
             </div>
         );

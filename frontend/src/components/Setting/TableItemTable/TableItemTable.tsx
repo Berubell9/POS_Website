@@ -100,7 +100,7 @@ export default function TableItemTable({ refreshKey }: TableItemTableProps) {
                 <tbody>
                     {loading && (
                         <tr>
-                            <td colSpan={5} className="py-8 text-center text-gray-400">
+                            <td colSpan={5} className="py-8 text-xl text-center text-gray-400">
                                 กำลังโหลดข้อมูล...
                             </td>
                         </tr>
@@ -137,7 +137,7 @@ export default function TableItemTable({ refreshKey }: TableItemTableProps) {
 
                     {!loading && filteredTables.length === 0 && (
                         <tr>
-                            <td colSpan={5} className="py-8 text-center text-gray-400">
+                            <td colSpan={5} className="py-8 text-xl text-center text-gray-400">
                                 ไม่พบข้อมูลโต๊ะ
                             </td>
                         </tr>

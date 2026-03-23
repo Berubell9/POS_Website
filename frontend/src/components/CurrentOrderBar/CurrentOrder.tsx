@@ -60,26 +60,28 @@ export default function CurrentOrder({
     const clearButton = (
         <button onClick={onClearAll} className="flex items-center text-red-500">
             <DeleteIcon sx={{ fontSize: 18 }} />
-            <p className="font-bold">ลบทั้งหมด</p>
+            <p className="font-bold ml-1">ลบทั้งหมด</p>
         </button>
     );
 
     const orderList = (
-        <div className="mt-5 flex-1 space-y-2 overflow-y-auto">
+        <div className="mt-5 flex-1 overflow-y-auto">
             {items.length === 0 ? (
-                <div className="py-10 text-center text-gray-400">
+                <div className="flex h-full items-center justify-center text-gray-300">
                     ยังไม่มีรายการสินค้า
                 </div>
             ) : (
-                items.map((item) => (
-                    <OrderItem
-                        key={item.productId}
-                        item={item}
-                        onIncrease={() => onIncreaseQty(item.productId)}
-                        onDecrease={() => onDecreaseQty(item.productId)}
-                        onRemove={() => onRemoveItem(item.productId)}
-                    />
-                ))
+                <div className="space-y-2">
+                    {items.map((item) => (
+                        <OrderItem
+                            key={item.productId}
+                            item={item}
+                            onIncrease={() => onIncreaseQty(item.productId)}
+                            onDecrease={() => onDecreaseQty(item.productId)}
+                            onRemove={() => onRemoveItem(item.productId)}
+                        />
+                    ))}
+                </div>
             )}
         </div>
     );
@@ -107,7 +109,7 @@ export default function CurrentOrder({
     return (
         <>
             {/* Desktop */}
-            <aside className="hidden h-full w-100 flex-col bg-white p-4 shadow-md xl:flex">
+            <aside className="hidden h-full w-100 flex-col bg-white px-4 py-6 shadow-md xl:flex">
                 <div className="mt-2 flex shrink-0 items-center justify-between border-b border-gray-200 pb-4">
                     {header}
                     {clearButton}
@@ -120,7 +122,7 @@ export default function CurrentOrder({
 
             {/* Mobile */}
             {isMobileOpen && (
-                <div className="fixed inset-0 z-50 flex flex-col bg-white p-4 xl:hidden">
+                <div className="fixed inset-0 z-50 flex flex-col bg-white px-4 py-6  xl:hidden">
                     <div className="flex shrink-0 items-center justify-between border-b border-gray-200 pb-4">
                         {header}
 

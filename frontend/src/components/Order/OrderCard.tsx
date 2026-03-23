@@ -6,9 +6,9 @@ export default function OrderCard() {
         <div className=" mt-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
             <div className="bg-white rounded-2xl shadow-sm p-4 flex flex-col h-full">
                 {/* วันที่ เวลา */}
-                <div className="flex items-center justify-between text-xs text-gray-400">
-                    <p>11/03/2569</p>
-                    <p>11:00</p>
+                <div className="flex items-center justify-between text-sm text-gray-400">
+                    <p>วันที่ : 11/03/2569</p>
+                    <p>เวลา : 11:00</p>
                 </div>
 
                 {/* คิว + สถานะ */}
@@ -19,14 +19,15 @@ export default function OrderCard() {
 
                     <div className="shrink-0 flex items-center gap-1 text-sm text-yellow-800 px-2 py-1 bg-yellow-100 rounded-full whitespace-nowrap">
                         <AccessTimeOutlinedIcon sx={{ fontSize: 16 }} />
-                        <span>รอดำเนินการ</span>
+                        <p>รอดำเนินการ</p>
                     </div>
                 </div>
 
-                {/* หมายเลขโต๊ะ */}
-                <p className="mt-2 text-sm text-gray-400">
-                    <span>โต๊ะ : </span>12
-                </p>
+                {/* หมายเลขโต๊ะ เเละหมายเลขออเดอร์ */}
+                <div className="mt-2 text-sm text-gray-400 space-y-2">
+                    <p>เลขออเดอร์ : </p>
+                    <p>โต๊ะ : </p>
+                </div>
 
                 {/* รายการทั้งหมด */}
                 <div className="mt-4 space-y-2 max-h-48 overflow-y-auto pr-1">
@@ -68,7 +69,7 @@ export default function OrderCard() {
 
                     <div className="flex items-center justify-between font-bold text-lg">
                         <p className="text-gray-800">รวมทั้งหมด</p>
-                        <p className="text-pink-500">฿200</p>
+                        <p className="text-pink-400">฿200</p>
                     </div>
                 </div>
 
@@ -76,15 +77,15 @@ export default function OrderCard() {
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-2">
                     <button
                         type="button"
-                        className="w-full py-2 items-center rounded-lg border border-pink-300 bg-pink-50 text-pink-400 text-sm font-medium shadow-sm hover:bg-pink-100 transition"
+                        className="w-full py-2 items-center rounded-lg border border-sky-300 bg-sky-50 text-sky-400 text-sm font-medium shadow-sm hover:bg-sky-100 transition"
                     >
                         <LocalPrintshopOutlinedIcon sx={{ fontSize: 18 }} className="mr-1"/>
-                        ใบเสร็จ
+                        พิมพ์ใบเสร็จ
                     </button>
 
                     <button
                         type="button"
-                        className="w-full py-2 rounded-lg bg-pink-400 text-white text-sm font-medium shadow-sm hover:bg-pink-500 transition"
+                        className="w-full py-2 items-center rounded-lg border border-pink-300 bg-pink-50 text-pink-400 text-sm font-medium shadow-sm hover:bg-pink-100 transition"
                     >
                         ขั้นตอนถัดไป
                     </button>

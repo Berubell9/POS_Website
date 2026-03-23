@@ -48,7 +48,7 @@ export default function SelectTable({
             <select
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
-                className="mt-1 h-11 w-full rounded-md border border-gray-200 p-2 text-gray-500 outline-none"
+                className="mt-1 h-11 w-full font-thin rounded-md border border-gray-300 p-2 text-gray-500 outline-none"
             >
                 <option>เลือกหมายเลขโต๊ะ</option>
 
