@@ -1,102 +1,155 @@
-import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
-import LocalPrintshopOutlinedIcon from '@mui/icons-material/LocalPrintshopOutlined';
+import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
+import LocalPrintshopOutlinedIcon from "@mui/icons-material/LocalPrintshopOutlined";
 
-export default function OrderCard() {
+type OrderItem = {
+    id: number;
+    product_id: number;
+    product_name_snapshot: string;
+    unit_price: number;
+    quantity: number;
+    total: number;
+};
+
+type OrderCardProps = {
+    queueNumber: string;
+    orderNumber: string;
+    tableNumber: string;
+    status: string;
+    dateText: string;
+    timeText: string;
+    vat: number;
+    total: number;
+    items: OrderItem[];
+    onPrint?: () => void;
+    onNextStep?: () => void;
+    onCancel?: () => void;
+};
+
+const formatMoney = (value: number) =>
+    Number(value || 0).toLocaleString("th-TH", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    });
+
+export default function OrderCard({
+    queueNumber,
+    orderNumber,
+    tableNumber,
+    status,
+    dateText,
+    timeText,
+    vat,
+    total,
+    items,
+    onPrint,
+    onNextStep,
+    onCancel,
+}: OrderCardProps) {
+    const statusClassName =
+        status === "รอดำเนินการ"
+            ? "bg-yellow-100 text-yellow-800"
+            : status === "กำลังทำ"
+                ? "bg-sky-100 text-sky-700"
+                : status === "เสร็จแล้ว"
+                    ? "bg-green-100 text-green-700"
+                    : "bg-gray-100 text-gray-600";
+
     return (
-        <div className=" mt-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-            <div className="bg-white rounded-2xl shadow-sm p-4 flex flex-col h-full">
-                {/* วันที่ เวลา */}
-                <div className="flex items-center justify-between text-sm text-gray-400">
-                    <p>วันที่ : 11/03/2569</p>
-                    <p>เวลา : 11:00</p>
+        <div className="flex h-full flex-col rounded-2xl bg-white p-4 shadow-sm">
+            {/* วันที่ เวลา */}
+            <div className="flex items-center justify-between text-sm text-gray-400">
+                <p>วันที่ : {dateText}</p>
+                <p>เวลา : {timeText}</p>
+            </div>
+
+            {/* คิว + สถานะ */}
+            <div className="mt-2 flex items-start justify-between gap-3">
+                <p className="warp-break-words text-xl font-extrabold text-gray-800">
+                    คิวที่ {queueNumber}
+                </p>
+
+                <div
+                    className={`flex shrink-0 items-center gap-1 rounded-full px-2 py-1 text-sm whitespace-nowrap ${statusClassName}`}
+                >
+                    <AccessTimeOutlinedIcon sx={{ fontSize: 16 }} />
+                    <p>{status}</p>
                 </div>
+            </div>
 
-                {/* คิว + สถานะ */}
-                <div className="flex items-start justify-between gap-3 mt-2">
-                    <p className="font-extrabold text-xl text-gray-800 wrap-break-words">
-                        คิวที่ #A001
-                    </p>
+            {/* หมายเลขโต๊ะ และหมายเลขออเดอร์ */}
+            <div className="mt-2 space-y-2 text-sm text-gray-400">
+                <p>เลขออเดอร์ : {orderNumber}</p>
+                <p>โต๊ะ : {tableNumber}</p>
+            </div>
 
-                    <div className="shrink-0 flex items-center gap-1 text-sm text-yellow-800 px-2 py-1 bg-yellow-100 rounded-full whitespace-nowrap">
-                        <AccessTimeOutlinedIcon sx={{ fontSize: 16 }} />
-                        <p>รอดำเนินการ</p>
+            {/* รายการทั้งหมด */}
+            <div className="mt-4 max-h-48 space-y-2 overflow-y-auto pr-1">
+                {items.length === 0 ? (
+                    <div className="py-6 text-center text-sm text-gray-400">
+                        ไม่มีรายการสินค้า
                     </div>
-                </div>
+                ) : (
+                    items.map((item) => (
+                        <div
+                            key={item.id}
+                            className="flex w-full items-center justify-between"
+                        >
+                            <div className="flex min-w-0 items-center gap-2">
+                                <p className="truncate text-sm text-gray-800">
+                                    {item.product_name_snapshot}
+                                </p>
+                                <p className="rounded-full bg-pink-100 px-2 py-1 text-xs text-pink-800 whitespace-nowrap">
+                                    x{item.quantity}
+                                </p>
+                            </div>
 
-                {/* หมายเลขโต๊ะ เเละหมายเลขออเดอร์ */}
-                <div className="mt-2 text-sm text-gray-400 space-y-2">
-                    <p>เลขออเดอร์ : </p>
-                    <p>โต๊ะ : </p>
-                </div>
-
-                {/* รายการทั้งหมด */}
-                <div className="mt-4 space-y-2 max-h-48 overflow-y-auto pr-1">
-                    <div className="flex items-center justify-between w-full">
-                        <div className="flex items-center gap-2 min-w-0">
-                            <p className="truncate text-sm text-gray-800">
-                                ชื่อเมนู bbbbbbbbbbbbbbbbbbbbb
-                            </p>
-                            <p className="text-xs text-pink-800 px-2 py-1 bg-pink-100 rounded-full whitespace-nowrap">
-                                x2
+                            <p className="ml-2 text-sm font-semibold text-gray-800 whitespace-nowrap">
+                                ฿{formatMoney(item.total)}
                             </p>
                         </div>
+                    ))
+                )}
+            </div>
 
-                        <p className="ml-2 text-sm font-semibold text-gray-800 whitespace-nowrap">
-                            ฿5000
-                        </p>
-                    </div>
-                    {/* ตัวอย่าง */}
-                    <div className="flex items-center justify-between w-full">
-                        <div className="flex items-center gap-2 min-w-0">
-                            <p className="truncate text-sm text-gray-800">ชื่อเมนู b</p>
-                            <p className="text-xs text-pink-800 px-2 py-1 bg-pink-100 rounded-full whitespace-nowrap">
-                                x2
-                            </p>
-                        </div>
-
-                        <p className="ml-2 text-sm font-semibold text-gray-800 whitespace-nowrap">
-                            ฿50
-                        </p>
-                    </div>
+            {/* สรุปยอด */}
+            <div className="mt-4 space-y-2 border-t border-gray-200 py-3">
+                <div className="flex items-center justify-between text-sm text-gray-500">
+                    <p>VAT 7%</p>
+                    <p>฿{formatMoney(vat)}</p>
                 </div>
 
-                {/* สรุปยอด */}
-                <div className="space-y-2 py-3 mt-4 border-t border-gray-200">
-                    <div className="flex items-center justify-between text-sm text-gray-500">
-                        <p>VAT 7%</p>
-                        <p>฿20</p>
-                    </div>
-
-                    <div className="flex items-center justify-between font-bold text-lg">
-                        <p className="text-gray-800">รวมทั้งหมด</p>
-                        <p className="text-pink-400">฿200</p>
-                    </div>
+                <div className="flex items-center justify-between text-lg font-bold">
+                    <p className="text-gray-800">รวมทั้งหมด</p>
+                    <p className="text-pink-400">฿{formatMoney(total)}</p>
                 </div>
+            </div>
 
-                {/* ปุ่ม */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-2">
-                    <button
-                        type="button"
-                        className="w-full py-2 items-center rounded-lg border border-sky-300 bg-sky-50 text-sky-400 text-sm font-medium shadow-sm hover:bg-sky-100 transition"
-                    >
-                        <LocalPrintshopOutlinedIcon sx={{ fontSize: 18 }} className="mr-1"/>
-                        พิมพ์ใบเสร็จ
-                    </button>
+            {/* ปุ่ม */}
+            <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-3">
+                <button
+                    type="button"
+                    onClick={onPrint}
+                    className="flex w-full items-center justify-center rounded-lg border border-sky-300 bg-sky-50 py-2 text-sm font-medium text-sky-400 shadow-sm transition hover:bg-sky-100"
+                >
+                    <LocalPrintshopOutlinedIcon sx={{ fontSize: 18 }} className="mr-1" />
+                    พิมพ์ใบเสร็จ
+                </button>
 
-                    <button
-                        type="button"
-                        className="w-full py-2 items-center rounded-lg border border-pink-300 bg-pink-50 text-pink-400 text-sm font-medium shadow-sm hover:bg-pink-100 transition"
-                    >
-                        ขั้นตอนถัดไป
-                    </button>
+                <button
+                    type="button"
+                    onClick={onNextStep}
+                    className="flex w-full items-center justify-center rounded-lg border border-pink-300 bg-pink-50 py-2 text-sm font-medium text-pink-400 shadow-sm transition hover:bg-pink-100"
+                >
+                    ขั้นตอนถัดไป
+                </button>
 
-                    <button
-                        type="button"
-                        className="w-full py-2 rounded-lg bg-red-500 text-white text-sm font-medium shadow-sm hover:bg-red-600 transition"
-                    >
-                        ยกเลิกออเดอร์
-                    </button>
-                </div>
+                <button
+                    type="button"
+                    onClick={onCancel}
+                    className="w-full rounded-lg bg-red-500 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-red-600"
+                >
+                    ยกเลิกออเดอร์
+                </button>
             </div>
         </div>
     );

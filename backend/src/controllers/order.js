@@ -2,6 +2,19 @@ import supabase from "../services/supabase.js";
 
 export const createOrder = async (req, res) => {
     try {
+        // หา queue ล่าสุด
+        const { data: lastOrder } = await supabase
+            .from("Orders")
+            .select("queue_number")
+            .order("queue_number", { ascending: false })
+            .limit(1)
+            .single();
+
+        // ถ้าไม่มี order มาก่อน → เริ่มที่ 1
+        const nextQueue = lastOrder?.queue_number
+            ? lastOrder.queue_number + 1
+            : 1;
+
         const { table_id, subtotal, vat, total, items } = req.body;
 
         if (!table_id) {
@@ -29,6 +42,7 @@ export const createOrder = async (req, res) => {
                     sub_total: subtotal,
                     vat_amount: vat,
                     total_amount: total,
+                    queue_number: nextQueue,
                 },
             ])
             .select()
@@ -81,7 +95,20 @@ export const getOrders = async (req, res) => {
     try {
         const { data, error } = await supabase
             .from("Orders")
-            .select(`*,Order_Item (*)`)
+            .select(`*,
+                tables:table_id (
+                    id,
+                    table_number
+                ),
+                items:Order_Item (
+                    id,
+                    product_id,
+                    product_name_snapshot,
+                    unit_price,
+                    quantity,
+                    total
+                )
+            `)
             .order("id", { ascending: false });
 
         if (error) {
@@ -91,11 +118,12 @@ export const getOrders = async (req, res) => {
             });
         }
 
-        return res.json(data);
+        return res.status(200).json(data || []);
     } catch (err) {
-        console.error("getOrders error:", err);
+        console.error("Unexpected getOrders error:", err);
         return res.status(500).json({
             message: "Unexpected server error",
+            error: err.message,
         });
     }
 };

@@ -1,32 +1,26 @@
-import { useState } from "react";
+type TabsProps = {
+    value: string;
+    onChange: (value: string) => void;
+};
 
-export default function Tabs() {
-    const [activeTab, setActiveTab] = useState("ทั้งหมด");
+const tabs = ["ทั้งหมด", "รอดำเนินการ", "กำลังทำ", "เสร็จแล้ว", "ยกเลิก"];
 
-    const tabs = [
-        { label: "ทั้งหมด" },
-        { label: "รอดำเนินการ" },
-        { label: "กำลังทำ", },
-        { label: "พร้อมเสิร์ฟ", },
-        { label: "เสร็จสิ้น", },
-        { label: "ยกเลิก", }
-    ];
-
+export default function Tabs({ value, onChange }: TabsProps) {
     return (
-        <div className='mt-4 p-4 bg-white rounded-lg shadow-sm'>
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3">            {tabs.map((tab) => (
-                <button
-                    key={tab.label}
-                    onClick={() => setActiveTab(tab.label)}
-                    className={`px-4 py-2 rounded-md transition
-                    ${activeTab === tab.label
-                            ? "bg-pink-400 text-white"
-                            : "bg-pink-50 text-pink-400 border border-pink-300 hover:bg-pink-100"
-                        }`}
-                >
-                    {tab.label}
-                </button>
-            ))}
+        <div className="mt-4 rounded-xl bg-white p-4 shadow-sm">
+            <div className="flex flex-wrap gap-2">
+                {tabs.map((tab) => (
+                    <button
+                        key={tab}
+                        onClick={() => onChange(tab)}
+                        className={`rounded-md px-4 py-2 text-sm font-medium transition ${value === tab
+                                ? "bg-pink-400 text-white"
+                                : "border border-pink-200 bg-pink-50 text-pink-400 hover:bg-pink-100"
+                            }`}
+                    >
+                        {tab}
+                    </button>
+                ))}
             </div>
         </div>
     );
