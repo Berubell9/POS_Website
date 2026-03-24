@@ -3,6 +3,7 @@ import OrderCard from "../components/Order/OrderCard";
 import SearchBar from "../components/Order/SearchBar";
 import Tabs from "../components/Order/Tabs";
 import DateFilter from "../components/Order/DateFilter";
+import { printReceipt } from "../components/Order/printReceipt";
 
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import FormatListBulletedOutlinedIcon from "@mui/icons-material/FormatListBulletedOutlined";
@@ -263,7 +264,7 @@ export default function Order() {
                                 vat={order.vat_amount}
                                 total={order.total_amount}
                                 items={order.items || []}
-                                onPrint={() => console.log("print", order.id)}
+                                onPrint={() => printReceipt(order)}
                                 onNextStep={() => {
                                     const next = getNextStatus(order.status);
                                     if (next) {
