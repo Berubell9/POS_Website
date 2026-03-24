@@ -46,7 +46,13 @@ export const createOrder = async (req, res) => {
                 ? todayOrders[0].queue_number + 1
                 : 1;
 
-        const orderNumber = `ORD-${Date.now()}`;
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, "0");
+        const day = String(now.getDate()).padStart(2, "0");
+        const datePart = `${year}${month}${day}`;
+
+        // ORD-YYYYMMDD-เลขคิว ex.ORD-20260324-001
+        const orderNumber = `ORD-${datePart}-${String(nextQueue).padStart(3, "0")}`;
 
         // 1) insert order
         const { data: orderData, error: orderError } = await supabase
@@ -142,6 +148,53 @@ export const getOrders = async (req, res) => {
         return res.status(200).json(data || []);
     } catch (err) {
         console.error("Unexpected getOrders error:", err);
+        return res.status(500).json({
+            message: "Unexpected server error",
+            error: err.message,
+        });
+    }
+};
+
+export const updateOrderStatus = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { status } = req.body;
+
+        if (!status) {
+            return res.status(400).json({
+                message: "Status is required",
+            });
+        }
+
+        const allowedStatuses = ["รอดำเนินการ", "กำลังทำ", "พร้อมเสิร์ฟ", "เสร็จสิ้น", "ยกเลิก"];
+
+        if (!allowedStatuses.includes(status)) {
+            return res.status(400).json({
+                message: "Invalid status",
+            });
+        }
+
+        const { data, error } = await supabase
+            .from("Orders")
+            .update({ status })
+            .eq("id", id)
+            .select()
+            .single();
+
+        if (error) {
+            console.error("updateOrderStatus error:", error);
+            return res.status(500).json({
+                message: "Failed to update order status",
+                error: error.message,
+            });
+        }
+
+        return res.status(200).json({
+            message: "Order status updated successfully",
+            data,
+        });
+    } catch (err) {
+        console.error("Unexpected updateOrderStatus error:", err);
         return res.status(500).json({
             message: "Unexpected server error",
             error: err.message,

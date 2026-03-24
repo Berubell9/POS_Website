@@ -70,18 +70,52 @@ export default function Home() {
         }));
     }, [orders]);
 
+    const updateOrderStatus = async (orderId: number, nextStatus: string) => {
+        try {
+            const res = await fetch(`${API_BASE}/orders/${orderId}/status`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ status: nextStatus }),
+            });
+
+            const result = await res.json();
+
+            if (!res.ok) {
+                console.error("updateOrderStatus error:", result);
+                alert(result.message || "อัปเดตสถานะไม่สำเร็จ");
+                return;
+            }
+
+            fetchOrders();
+        } catch (error) {
+            console.error("Unexpected updateOrderStatus error:", error);
+            alert("เกิดข้อผิดพลาด");
+        }
+    };
+
     const pendingOrders = useMemo(
-        () => mappedOrders.filter((order) => order.status === "รอดำเนินการ"),
+        () =>
+            mappedOrders
+                .filter((order) => order.status === "รอดำเนินการ")
+                .sort((a, b) => Number(a.queueNumber) - Number(b.queueNumber)),
         [mappedOrders]
     );
 
     const cookingOrders = useMemo(
-        () => mappedOrders.filter((order) => order.status === "กำลังทำ"),
+        () =>
+            mappedOrders
+                .filter((order) => order.status === "กำลังทำ")
+                .sort((a, b) => Number(a.queueNumber) - Number(b.queueNumber)),
         [mappedOrders]
     );
 
     const readyOrders = useMemo(
-        () => mappedOrders.filter((order) => order.status === "พร้อมเสิร์ฟ"),
+        () =>
+            mappedOrders
+                .filter((order) => order.status === "พร้อมเสิร์ฟ")
+                .sort((a, b) => Number(a.queueNumber) - Number(b.queueNumber)),
         [mappedOrders]
     );
 
@@ -109,7 +143,7 @@ export default function Home() {
                             orders={pendingOrders}
                             actionLabel="ขั้นตอนถัดไป"
                             actionVariant="pink"
-                            onAction={(orderId) => console.log("next pending", orderId)}
+                            onAction={(orderId) => updateOrderStatus(orderId, "กำลังทำ")}
                         />
 
                         <OrderColumn
@@ -118,16 +152,16 @@ export default function Home() {
                             orders={cookingOrders}
                             actionLabel="พร้อมเสิร์ฟ"
                             actionVariant="sky"
-                            onAction={(orderId) => console.log("next cooking", orderId)}
+                            onAction={(orderId) => updateOrderStatus(orderId, "พร้อมเสิร์ฟ")}
                         />
 
                         <OrderColumn
                             title="พร้อมเสิร์ฟ"
                             color="green"
                             orders={readyOrders}
-                            actionLabel="เสิร์ฟแล้ว"
+                            actionLabel="เสร็จสิ้น"
                             actionVariant="green"
-                            onAction={(orderId) => console.log("serve", orderId)}
+                            onAction={(orderId) => updateOrderStatus(orderId, "เสร็จสิ้น")}
                         />
                     </div>
                 )}

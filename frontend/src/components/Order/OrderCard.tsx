@@ -50,9 +50,24 @@ export default function OrderCard({
             ? "bg-yellow-100 text-yellow-800"
             : status === "กำลังทำ"
                 ? "bg-sky-100 text-sky-700"
-                : status === "เสร็จแล้ว"
+                : status === "พร้อมเสิร์ฟ"
                     ? "bg-green-100 text-green-700"
-                    : "bg-gray-100 text-gray-600";
+                    : status === "เสร็จสิ้น"
+                        ? "bg-indigo-100 text-indigo-600"
+                        : "bg-red-100 text-red-600";
+
+    const getNextStatus = (status: string) => {
+        if (status === "รอดำเนินการ") return "กำลังทำ";
+        if (status === "กำลังทำ") return "พร้อมเสิร์ฟ";
+        if (status === "พร้อมเสิร์ฟ") return "เสร็จสิ้น";
+        return null;
+    };
+
+    const getNextLabel = (status: string) => {
+        if (status === "พร้อมเสิร์ฟ") return "เสร็จสิ้น";
+        if (status === "เสร็จสิ้น") return "-";
+        return "ขั้นตอนถัดไป";
+    };
 
     return (
         <div className="flex h-full flex-col rounded-2xl bg-white p-4 shadow-sm">
@@ -135,21 +150,25 @@ export default function OrderCard({
                     พิมพ์ใบเสร็จ
                 </button>
 
-                <button
-                    type="button"
-                    onClick={onNextStep}
-                    className="flex w-full items-center justify-center rounded-lg border border-pink-300 bg-pink-50 py-2 text-sm font-medium text-pink-400 shadow-sm transition hover:bg-pink-100"
-                >
-                    ขั้นตอนถัดไป
-                </button>
+                {getNextStatus(status) && (
+                    <button
+                        type="button"
+                        onClick={onNextStep}
+                        className="flex w-full items-center justify-center rounded-lg border border-pink-300 bg-pink-50 py-2 text-sm font-medium text-pink-400 shadow-sm transition hover:bg-pink-100"
+                    >
+                        {getNextLabel(status)}
+                    </button>
+                )}
 
-                <button
-                    type="button"
-                    onClick={onCancel}
-                    className="w-full rounded-lg bg-red-500 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-red-600"
-                >
-                    ยกเลิกออเดอร์
-                </button>
+                {status !== "ยกเลิก" && status !== "เสร็จสิ้น" && (
+                    <button
+                        type="button"
+                        onClick={onCancel}
+                        className="w-full rounded-lg bg-red-500 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-red-600"
+                    >
+                        ยกเลิกออเดอร์
+                    </button>
+                )}
             </div>
         </div>
     );

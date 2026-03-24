@@ -18,7 +18,7 @@ export default function DashBoard() {
                 <StatusCard/>
                 {/* ยอดขายรายวัน
                 ยอกขายรายเดือน
-                เมนูขายดี 
+                เมนูขายดี 5 อันดับ
                 
                 */}
             </div>

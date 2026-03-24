@@ -95,7 +95,8 @@ export default function Tabs({ value, onChange }: Props) {
                             <span className="truncate">{tab.name}</span>
 
                             <span
-                                className={`ml-2 ${isActive
+                                className={`ml-2 
+                                    ${isActive
                                         ? "text-white"
                                         : "text-pink-400"
                                     }`}

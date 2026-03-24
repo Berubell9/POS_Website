@@ -48,6 +48,13 @@ const formatTime = (dateString: string) => {
     });
 };
 
+const getNextStatus = (status: string) => {
+    if (status === "รอดำเนินการ") return "กำลังทำ";
+    if (status === "กำลังทำ") return "พร้อมเสิร์ฟ";
+    if (status === "พร้อมเสิร์ฟ") return "เสร็จสิ้น";
+    return null;
+};
+
 export default function Order() {
     const [orders, setOrders] = useState<OrderRow[]>([]);
     const [searchTerm, setSearchTerm] = useState("");
@@ -75,6 +82,31 @@ export default function Order() {
             console.error("fetchOrders error:", error);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const updateOrderStatus = async (orderId: number, nextStatus: string) => {
+        try {
+            const res = await fetch(`${API_BASE}/orders/${orderId}/status`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ status: nextStatus }),
+            });
+
+            const result = await res.json();
+
+            if (!res.ok) {
+                console.error("updateOrderStatus error:", result);
+                alert(result.message || "อัปเดตสถานะไม่สำเร็จ");
+                return;
+            }
+
+            fetchOrders();
+        } catch (error) {
+            console.error("Unexpected updateOrderStatus error:", error);
+            alert("เกิดข้อผิดพลาด");
         }
     };
 
@@ -147,6 +179,25 @@ export default function Order() {
         });
     }, [orders, searchTerm, selectedStatus, selectedDate, selectedPreset]);
 
+    const statusCounts = useMemo(() => {
+        const map: Record<string, number> = {
+            ทั้งหมด: orders.length,
+            รอดำเนินการ: 0,
+            กำลังทำ: 0,
+            พร้อมเสิร์ฟ: 0,
+            เสร็จสิ้น: 0,
+            ยกเลิก: 0,
+        };
+
+        orders.forEach((order) => {
+            if (map[order.status] !== undefined) {
+                map[order.status]++;
+            }
+        });
+
+        return map;
+    }, [orders]);
+
     return (
         <div className="relative flex h-full text-gray-800">
             <div className="flex-1 overflow-y-auto p-4 pb-6">
@@ -159,7 +210,11 @@ export default function Order() {
                 </div>
 
                 {/* Content */}
-                <Tabs value={selectedStatus} onChange={setSelectedStatus} />
+                <Tabs
+                    value={selectedStatus}
+                    onChange={setSelectedStatus}
+                    counts={statusCounts}
+                />
 
                 <div className="mt-4 flex items-center">
                     <FormatListBulletedOutlinedIcon className="mr-2 text-pink-400" />
@@ -209,8 +264,13 @@ export default function Order() {
                                 total={order.total_amount}
                                 items={order.items || []}
                                 onPrint={() => console.log("print", order.id)}
-                                onNextStep={() => console.log("next", order.id)}
-                                onCancel={() => console.log("cancel", order.id)}
+                                onNextStep={() => {
+                                    const next = getNextStatus(order.status);
+                                    if (next) {
+                                        updateOrderStatus(order.id, next);
+                                    }
+                                }}
+                                onCancel={() => updateOrderStatus(order.id, "ยกเลิก")}
                             />
                         ))}
                     </div>
