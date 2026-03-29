@@ -6,6 +6,7 @@ import categoryRoutes from "./routes/category.js";
 import productImageRoutes from "./routes/product-image.js";
 import tableRoutes from "./routes/table.js";
 import orderRoutes from "./routes/order.js";
+import dashboardRoutes from "./routes/dashboard.js";
 
 const app = express();
 const PORT = 3001;
@@ -19,6 +20,7 @@ app.use("/api/categories", categoryRoutes);
 app.use("/api/product-images", productImageRoutes);
 app.use("/api/tables", tableRoutes);
 app.use("/api/orders", orderRoutes);
+app.use("/api/dashboard", dashboardRoutes);
 
 // Test route
 app.get("/", (req, res) => {

@@ -35,6 +35,7 @@ const API_BASE = "http://localhost:3001/api";
 export default function Home() {
     const [orders, setOrders] = useState<OrderRow[]>([]);
     const [loading, setLoading] = useState(false);
+    const [refreshKey, setRefreshKey] = useState(0);
 
     useEffect(() => {
         fetchOrders();
@@ -89,6 +90,7 @@ export default function Home() {
             }
 
             fetchOrders();
+            setRefreshKey((prev) => prev + 1);
         } catch (error) {
             console.error("Unexpected updateOrderStatus error:", error);
             alert("เกิดข้อผิดพลาด");
@@ -129,7 +131,7 @@ export default function Home() {
                     <p className="text-3xl font-extrabold">หน้าแรก</p>
                 </div>
 
-                <StatusCard />
+                <StatusCard refreshKey={refreshKey} />
 
                 {loading ? (
                     <div className="mt-4 text-xl rounded-xl bg-white py-10 text-center text-gray-400 shadow-sm">

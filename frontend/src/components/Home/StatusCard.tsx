@@ -1,54 +1,131 @@
-import LocalAtmOutlinedIcon from '@mui/icons-material/LocalAtmOutlined';
-import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
-import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
-import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
+import { useEffect, useMemo, useState } from "react";
 
-export default function StatusCard() {
+import LocalAtmOutlinedIcon from "@mui/icons-material/LocalAtmOutlined";
+import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
+import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
+import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
+
+const API_BASE = "http://localhost:3001/api";
+
+type Order = {
+    id: number;
+    status: string;
+    total_amount: number;
+    created_at: string;
+};
+
+type StatusCardProps = {
+    refreshKey?: number;
+};
+
+const formatMoney = (value: number) =>
+    Number(value || 0).toLocaleString("th-TH", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    });
+
+export default function StatusCard({ refreshKey }: StatusCardProps) {
+    const [orders, setOrders] = useState<Order[]>([]);
+
+    useEffect(() => {
+        fetchOrders();
+    }, [refreshKey]);
+
+    const fetchOrders = async () => {
+        try {
+            const res = await fetch(`${API_BASE}/orders`);
+            const data = await res.json();
+            setOrders(data || []);
+        } catch (err) {
+            console.error("fetchOrders error:", err);
+        }
+    };
+
+    // filter วันนี้
+    const todayOrders = useMemo(() => {
+        const today = new Date();
+
+        return orders.filter((o) => {
+            const d = new Date(o.created_at);
+            return (
+                d.getFullYear() === today.getFullYear() &&
+                d.getMonth() === today.getMonth() &&
+                d.getDate() === today.getDate()
+            );
+        });
+    }, [orders]);
+
+    // ยอดขายวันนี้
+    const totalSales = useMemo(() => {
+        return todayOrders.reduce((sum, o) => sum + (o.total_amount || 0), 0);
+    }, [todayOrders]);
+
+    // จำนวนออเดอร์
+    const totalOrders = todayOrders.length;
+
+    // รอดำเนินการ 
+    const pendingCount = useMemo(() => {
+        return todayOrders.filter((o) => o.status === "รอดำเนินการ").length;
+    }, [todayOrders]);
+
+    // เสร็จสิ้น 
+    const doneCount = useMemo(() => {
+        return todayOrders.filter((o) => o.status === "เสร็จสิ้น").length;
+    }, [todayOrders]);
+
     return (
-        <div className="mt-4 grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+        <div className="mt-4 grid grid-cols-2 gap-3 md:gap-4 lg:grid-cols-4">
             {/* ยอดขายวันนี้ */}
-            <div className="bg-white p-4 min-h-25 shadow-sm rounded-xl">
-                <div className="flex items-center gap-2 mb-2">
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-green-100">
+            <div className="min-h-25 rounded-xl bg-white p-4 shadow-sm">
+                <div className="mb-2 flex items-center gap-2">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-green-100">
                         <LocalAtmOutlinedIcon className="text-green-600" sx={{ fontSize: 20 }} />
                     </div>
-                    <p className="text-gray-400 text-sm md:text-base">ยอดขายวันนี้</p>
+                    <p className="text-sm text-gray-400 md:text-base">ยอดขายวันนี้</p>
                 </div>
-                <p className="text-green-900 font-extrabold text-xl md:text-2xl wrap-break-word">฿0000000</p>
+                <p className="text-xl font-extrabold text-green-900 md:text-2xl">
+                    ฿{formatMoney(totalSales)}
+                </p>
             </div>
 
             {/* จำนวนออเดอร์วันนี้ */}
-            <div className="bg-white p-4 min-h-25 shadow-sm rounded-xl">
-                <div className="flex items-center gap-2 mb-2">
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-sky-100">
+            <div className="min-h-25 rounded-xl bg-white p-4 shadow-sm">
+                <div className="mb-2 flex items-center gap-2">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-sky-100">
                         <ShoppingBagOutlinedIcon className="text-sky-600" sx={{ fontSize: 20 }} />
                     </div>
-                    <p className="text-gray-400 text-sm md:text-base">จำนวนออเดอร์วันนี้</p>
+                    <p className="text-sm text-gray-400 md:text-base">จำนวนออเดอร์วันนี้</p>
                 </div>
-                <p className="text-sky-900 font-extrabold text-xl md:text-2xl wrap-break-word">000</p>
+                <p className="text-xl font-extrabold text-sky-900 md:text-2xl">
+                    {totalOrders}
+                </p>
             </div>
 
             {/* รอดำเนินการ */}
-            <div className="bg-white p-4 min-h-25 shadow-sm rounded-xl">
-                <div className="flex items-center gap-2 mb-2">
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-yellow-100">
+            <div className="min-h-25 rounded-xl bg-white p-4 shadow-sm">
+                <div className="mb-2 flex items-center gap-2">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-yellow-100">
                         <AccessTimeOutlinedIcon className="text-yellow-600" sx={{ fontSize: 20 }} />
                     </div>
-                    <p className="text-gray-400 text-sm md:text-base">รอดำเนินการ</p>
+                    <p className="text-sm text-gray-400 md:text-base">รอดำเนินการ</p>
                 </div>
-                <p className="text-yellow-900 font-extrabold text-xl md:text-2xl wrap-break-word">0</p>
+                <p className="text-xl font-extrabold text-yellow-900 md:text-2xl">
+                    {pendingCount}
+                </p>
             </div>
 
-            {/* ออเดอร์เสร็จสิ้น */}
-            <div className="bg-white p-4 min-h-25 shadow-sm rounded-xl">
-                <div className="flex items-center gap-2 mb-2">
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-indigo-100">
+            {/* เสร็จสิ้น */}
+            <div className="min-h-25 rounded-xl bg-white p-4 shadow-sm">
+                <div className="mb-2 flex items-center gap-2">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-100">
                         <CheckCircleOutlineOutlinedIcon className="text-indigo-600" sx={{ fontSize: 20 }} />
                     </div>
-                    <p className="text-gray-400 text-sm md:text-base">ออเดอร์เสร็จสิ้น</p>
+                    <p className="text-sm text-gray-400 md:text-base">ออเดอร์เสร็จสิ้น</p>
                 </div>
-                <p className="text-indigo-900 font-extrabold text-xl md:text-2xl wrap-break-word">0</p>
+                <p className="text-xl font-extrabold text-indigo-900 md:text-2xl">
+                    {doneCount}
+                </p>
             </div>
         </div>
-    )
+    );
 }

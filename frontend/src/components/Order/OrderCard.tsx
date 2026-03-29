@@ -126,49 +126,52 @@ export default function OrderCard({
                 )}
             </div>
 
-            {/* สรุปยอด */}
-            <div className="mt-4 space-y-2 border-t border-gray-200 py-3">
-                <div className="flex items-center justify-between text-sm text-gray-500">
-                    <p>VAT 7%</p>
-                    <p>฿{formatMoney(vat)}</p>
+            
+            <div className="mt-auto">
+                {/* สรุปยอด */}
+                <div className="mt-4 space-y-2 border-t border-gray-200 py-3">
+                    <div className="flex items-center justify-between text-sm text-gray-500">
+                        <p>VAT 7%</p>
+                        <p>฿{formatMoney(vat)}</p>
+                    </div>
+
+                    <div className="flex items-center justify-between text-lg font-bold">
+                        <p className="text-gray-800">รวมทั้งหมด</p>
+                        <p className="text-pink-400">฿{formatMoney(total)}</p>
+                    </div>
                 </div>
 
-                <div className="flex items-center justify-between text-lg font-bold">
-                    <p className="text-gray-800">รวมทั้งหมด</p>
-                    <p className="text-pink-400">฿{formatMoney(total)}</p>
+                {/* ปุ่ม */}
+                <div className="mt-2 flex flex-col gap-2 xl:flex-row">
+                    <button
+                        type="button"
+                        onClick={onPrint}
+                        className="flex w-full items-center justify-center rounded-lg border border-sky-300 bg-sky-50 py-2 text-sm font-medium text-sky-400 shadow-sm transition hover:bg-sky-100"
+                    >
+                        <LocalPrintshopOutlinedIcon sx={{ fontSize: 18 }} className="mr-1" />
+                        พิมพ์ใบเสร็จ
+                    </button>
+
+                    {getNextStatus(status) && (
+                        <button
+                            type="button"
+                            onClick={onNextStep}
+                            className="flex col-span-full w-full items-center justify-center rounded-lg border border-pink-300 bg-pink-50 py-2 text-sm font-medium text-pink-400 shadow-sm transition hover:bg-pink-100"
+                        >
+                            {getNextLabel(status)}
+                        </button>
+                    )}
+
+                    {status !== "ยกเลิก" && status !== "เสร็จสิ้น" && (
+                        <button
+                            type="button"
+                            onClick={onCancel}
+                            className="w-full rounded-lg bg-red-500 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-red-600"
+                        >
+                            ยกเลิกออเดอร์
+                        </button>
+                    )}
                 </div>
-            </div>
-
-            {/* ปุ่ม */}
-            <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-3">
-                <button
-                    type="button"
-                    onClick={onPrint}
-                    className="flex w-full items-center justify-center rounded-lg border border-sky-300 bg-sky-50 py-2 text-sm font-medium text-sky-400 shadow-sm transition hover:bg-sky-100"
-                >
-                    <LocalPrintshopOutlinedIcon sx={{ fontSize: 18 }} className="mr-1" />
-                    พิมพ์ใบเสร็จ
-                </button>
-
-                {getNextStatus(status) && (
-                    <button
-                        type="button"
-                        onClick={onNextStep}
-                        className="flex w-full items-center justify-center rounded-lg border border-pink-300 bg-pink-50 py-2 text-sm font-medium text-pink-400 shadow-sm transition hover:bg-pink-100"
-                    >
-                        {getNextLabel(status)}
-                    </button>
-                )}
-
-                {status !== "ยกเลิก" && status !== "เสร็จสิ้น" && (
-                    <button
-                        type="button"
-                        onClick={onCancel}
-                        className="w-full rounded-lg bg-red-500 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-red-600"
-                    >
-                        ยกเลิกออเดอร์
-                    </button>
-                )}
             </div>
         </div>
     );
