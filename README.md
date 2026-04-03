@@ -1,10 +1,14 @@
 # Start Project
 ### Frontend
-`cd frontend`
-`npm i`
-`npm run dev`
+1. `cd frontend`
+
+2. `npm i`
+
+3. `npm run dev`
 
 ### Backend
-`cd backend`
-`npm i`
-`npm run dev`
+1. `cd backend`
+
+2. `npm i`
+
+3. `npm run dev`
