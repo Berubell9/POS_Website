@@ -1,6 +1,6 @@
 import SelectTable from "./SelectTable";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
-import RemoveShoppingCartOutlinedIcon from '@mui/icons-material/RemoveShoppingCartOutlined';
+import RemoveShoppingCartOutlinedIcon from "@mui/icons-material/RemoveShoppingCartOutlined";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CloseIcon from "@mui/icons-material/Close";
 import OrderItem from "./OrderItem";
@@ -61,19 +61,19 @@ export default function CurrentOrder({
     const clearButton = (
         <button onClick={onClearAll} className="flex items-center text-red-500">
             <DeleteIcon sx={{ fontSize: 18 }} />
-            <p className="font-bold ml-1">ลบทั้งหมด</p>
+            <p className="ml-1 font-bold">ลบทั้งหมด</p>
         </button>
     );
 
     const orderList = (
         <div className="mt-5 flex-1 overflow-y-auto">
             {items.length === 0 ? (
-                <div className="flex flex-col h-full items-center justify-center text-gray-400">
-                    <RemoveShoppingCartOutlinedIcon sx={{ fontSize: 50 }}/>
-                    ยังไม่มีรายการเมนู
+                <div className="flex h-full flex-col items-center justify-center text-center text-gray-400">
+                    <RemoveShoppingCartOutlinedIcon sx={{ fontSize: 50 }} />
+                    <p className="mt-2">ยังไม่มีรายการเมนู</p>
                 </div>
             ) : (
-                <div className="space-y-2">
+                <div className="space-y-2 pr-1">
                     {items.map((item) => (
                         <OrderItem
                             key={item.productId}
@@ -89,23 +89,24 @@ export default function CurrentOrder({
     );
 
     const content = (
-        <>
-            <SelectTable
-                value={selectedTableId}
-                onChange={onSelectTable}
-            />
+        <div className="flex h-full flex-col overflow-hidden">
+            <div className="shrink-0">
+                <SelectTable value={selectedTableId} onChange={onSelectTable} />
+            </div>
 
             {orderList}
 
-            <Footer
-                itemCount={itemCount}
-                subtotal={subtotal}
-                vat={vat}
-                total={total}
-                submittingOrder={submittingOrder}
-                onConfirmOrder={onConfirmOrder}
-            />
-        </>
+            <div className="shrink-0 border-t border-gray-200 bg-white pt-4">
+                <Footer
+                    itemCount={itemCount}
+                    subtotal={subtotal}
+                    vat={vat}
+                    total={total}
+                    submittingOrder={submittingOrder}
+                    onConfirmOrder={onConfirmOrder}
+                />
+            </div>
+        </div>
     );
 
     return (
@@ -117,14 +118,14 @@ export default function CurrentOrder({
                     {clearButton}
                 </div>
 
-                <div className="mt-4 flex flex-1 flex-col">
+                <div className="mt-4 flex flex-1 flex-col overflow-hidden">
                     {content}
                 </div>
             </aside>
 
             {/* Mobile */}
             {isMobileOpen && (
-                <div className="fixed inset-0 z-50 flex flex-col bg-white px-4 py-6  xl:hidden">
+                <div className="fixed inset-0 z-50 flex flex-col bg-white px-4 py-6 xl:hidden">
                     <div className="flex shrink-0 items-center justify-between border-b border-gray-200 pb-4">
                         {header}
 
