@@ -11,7 +11,7 @@ type SelectTableProps = {
     onChange: (value: string) => void;
 };
 
-const API_BASE = "http://localhost:3001/api";
+const API_BASE = import.meta.env.VITE_API_BASE;
 
 export default function SelectTable({
     value,
@@ -28,7 +28,7 @@ export default function SelectTable({
         try {
             setLoading(true);
 
-            const res = await fetch(`${API_BASE}/tables`);
+            const res = await fetch(`${API_BASE}/api/tables`);
             if (!res.ok) throw new Error("โหลดโต๊ะไม่สำเร็จ");
 
             const data = await res.json();
