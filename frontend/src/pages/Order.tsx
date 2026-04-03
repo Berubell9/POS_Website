@@ -35,7 +35,7 @@ type OrderRow = {
     items?: OrderItem[];
 };
 
-const API_BASE = "http://localhost:3001/api";
+const API_BASE = import.meta.env.VITE_API_BASE;
 
 // วันที่
 const formatDate = (dateString: string) => {
@@ -86,7 +86,7 @@ export default function Order() {
         try {
             setLoading(true);
 
-            const res = await fetch(`${API_BASE}/orders`);
+            const res = await fetch(`${API_BASE}/api/orders`);
             if (!res.ok) {
                 setAlert({
                     message: "โหลดข้อมูลออเดอร์ไม่สำเร็จ",
@@ -111,7 +111,7 @@ export default function Order() {
     // อัพเดตสถานะออเดอร์ ให้สถานะเปลี่ยนเมื่อกดขั้นตอนถัดไป
     const updateOrderStatus = async (orderId: number, nextStatus: string) => {
         try {
-            const res = await fetch(`${API_BASE}/orders/${orderId}/status`, {
+            const res = await fetch(`${API_BASE}/api/orders/${orderId}/status`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
