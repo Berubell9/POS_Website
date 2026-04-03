@@ -8,7 +8,7 @@ type AddCategoryButtonProps = {
 
 };
 
-const API_BASE = "http://localhost:3001/api";
+const API_BASE = import.meta.env.VITE_API_BASE;
 
 export default function AddCategoryButton({
   onAdded,
@@ -36,7 +36,7 @@ export default function AddCategoryButton({
     try {
       setLoading(true);
 
-      const res = await fetch(`${API_BASE}/categories`, {
+      const res = await fetch(`${API_BASE}/api/categories`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
