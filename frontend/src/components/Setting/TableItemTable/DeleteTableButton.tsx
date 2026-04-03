@@ -13,7 +13,7 @@ type DeleteTableButtonProps = {
     onAlert?: (message: string, type: "success" | "error" | "info" | "warning") => void;
 };
 
-const API_BASE = "http://localhost:3001/api";
+const API_BASE = import.meta.env.VITE_API_BASE;
 
 export default function DeleteTableButton({
     table,
@@ -27,7 +27,7 @@ export default function DeleteTableButton({
         if (!confirmed) return;
 
         try {
-            const res = await fetch(`${API_BASE}/tables/${table.id}`, {
+            const res = await fetch(`${API_BASE}/api/tables/${table.id}`, {
                 method: "DELETE",
             });
 
