@@ -31,7 +31,7 @@ type OrderRow = {
     items?: OrderItem[];
 };
 
-const API_BASE = "http://localhost:3001/api";
+const API_BASE = import.meta.env.API_BASE;
 
 export default function Home() {
     // State
