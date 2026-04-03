@@ -21,7 +21,7 @@ type Props = {
     onAlert?: (message: string, type: "success" | "error" | "info" | "warning") => void;
 };
 
-const API_BASE = "http://localhost:3001/api";
+const API_BASE = import.meta.env.VITE_API_BASE;
 
 export default function ShowMenuButton({
     product,
@@ -42,7 +42,7 @@ export default function ShowMenuButton({
     // ดึง Categories จาก supabase
     const fetchCategories = async () => {
         try {
-            const res = await fetch(`${API_BASE}/categories`);
+            const res = await fetch(`${API_BASE}/api/categories`);
 
             if (!res.ok) {
                 onAlert?.("โหลดข้อมูลหมวดหมู่ไม่สำเร็จ", "error");
