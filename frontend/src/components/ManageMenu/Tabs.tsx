@@ -21,7 +21,7 @@ type TabItem = {
     name: string;
 };
 
-const API_BASE = "http://localhost:3001/api";
+const API_BASE = import.meta.env.VITE_API_BASE;
 
 export default function Tabs({ 
     value, 
@@ -41,8 +41,8 @@ export default function Tabs({
     const fetchData = async () => {
         try {
             const [categoryRes, productRes] = await Promise.all([
-                fetch(`${API_BASE}/categories`),
-                fetch(`${API_BASE}/products`),
+                fetch(`${API_BASE}/api/categories`),
+                fetch(`${API_BASE}/api/products`),
             ]);
 
             if (!categoryRes.ok) {
