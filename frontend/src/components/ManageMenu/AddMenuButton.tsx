@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import PostAddOutlinedIcon from "@mui/icons-material/PostAddOutlined";
-
+import Alert from "../../components/Alert";
 type Category = {
     id: number;
     name: string;
@@ -26,6 +26,12 @@ export default function AddMenuButton({ onAdded }: AddMenuButtonProps) {
     const [newProductPrice, setNewProductPrice] = useState("");
     const [loading, setLoading] = useState(false);
 
+    // Notion State
+    const [alert, setAlert] = useState<{
+        message: string;
+        type: "success" | "error" | "info" | "warning";
+    } | null>(null);
+
     // ดึงข้อมูล Categories เมื่อเปิด Modal
     useEffect(() => {
         if (open) {
@@ -39,13 +45,22 @@ export default function AddMenuButton({ onAdded }: AddMenuButtonProps) {
             const res = await fetch(`${API_BASE}/categories`);
 
             if (!res.ok) {
-                throw new Error("โหลดหมวดหมู่ไม่สำเร็จ");
+                setAlert({
+                    message: "โหลดข้อมูลหมวดหมู่ไม่สำเร็จ",
+                    type: "error",
+                });
+                return;
             }
 
             const data = await res.json();
             setCategories(data || []);
         } catch (error) {
             console.error("Error fetching categories:", error);
+            setAlert({
+                message: "ดึงข้อมูลหมวดหมู่ไม่สำเร็จ",
+                type: "error",
+            });
+            return;
         }
     };
 
@@ -81,22 +96,34 @@ export default function AddMenuButton({ onAdded }: AddMenuButtonProps) {
     // เมื่อกดปุ่มบันทึก จะมีแจ้งเตือน Error เมื่อใส่ข้อมูลไม่ครบ
     const addProduct = async () => {
         if (!newProductName.trim()) {
-            alert("กรุณากรอกชื่อเมนู");
+            setAlert({
+                message: "กรุณากรอกชื่อเมนู",
+                type: "warning",
+            });
             return;
         }
 
         if (!newProductCategoryId) {
-            alert("กรุณาเลือกหมวดหมู่");
+            setAlert({
+                message: "กรุณาเลือกหมวดหมู่",
+                type: "warning",
+            });
             return;
         }
 
         if (!newProductPrice.trim() || isNaN(Number(newProductPrice))) {
-            alert("กรุณากรอกราคาให้ถูกต้อง");
+            setAlert({
+                message: "กรุณากรอกราคาให้ถูกต้อง",
+                type: "warning",
+            });
             return;
         }
 
         if (!newProductImageFile) {
-            alert("กรุณาเลือกรูปภาพ");
+            setAlert({
+                message: "กรุณาเลือกรูปภาพ",
+                type: "warning",
+            });
             return;
         }
 
@@ -118,7 +145,10 @@ export default function AddMenuButton({ onAdded }: AddMenuButtonProps) {
 
             if (!uploadRes.ok) {
                 console.error("Upload image error:", uploadResult);
-                alert(uploadResult.message || "อัปโหลดรูปไม่สำเร็จ");
+                setAlert({
+                    message: "อัปโหลดรูปไม่สำเร็จ",
+                    type: "error",
+                });
                 return;
             }
 
@@ -145,16 +175,25 @@ export default function AddMenuButton({ onAdded }: AddMenuButtonProps) {
 
             if (!createRes.ok) {
                 console.error("Insert product error:", createResult);
-                alert(createResult.message || "เพิ่มเมนูไม่สำเร็จ");
+                setAlert({
+                    message: "เพิ่มเมนูไม่สำเร็จ",
+                    type: "error",
+                });
                 return;
             }
 
-            alert("เพิ่มเมนูสำเร็จ");
+            setAlert({
+                message: "เพิ่มเมนูสำเร็จ",
+                type: "success",
+            });
             handleClose();
             await onAdded?.();
         } catch (error) {
             console.error("Error adding product:", error);
-            alert("เกิดข้อผิดพลาด");
+            setAlert({
+                message: "เกิดข้อผิดพลาดขณะเพิ่มเมนู",
+                type: "error",
+            });
         } finally {
             setLoading(false);
         }
@@ -162,6 +201,13 @@ export default function AddMenuButton({ onAdded }: AddMenuButtonProps) {
 
     return (
         <div>
+            {alert && (
+                <Alert
+                    message={alert.message}
+                    type={alert.type}
+                    onClose={() => setAlert(null)}
+                />
+            )}
             {/* ปุ่มกดเรียก Modal */}
             <button
                 onClick={() => setOpen(true)}
@@ -174,11 +220,8 @@ export default function AddMenuButton({ onAdded }: AddMenuButtonProps) {
             {/* Modal */}
             {open && (
                 // พื้นหลังดำ
-                <div
-                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
-                    onClick={handleClose}
-                >
-
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+                    
                     {/* พื้นหลังขาว */}
                     <div
                         className="w-full max-w-lg rounded-xl bg-white p-6 shadow-lg"

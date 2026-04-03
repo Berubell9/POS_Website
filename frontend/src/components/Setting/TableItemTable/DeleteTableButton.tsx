@@ -10,6 +10,7 @@ type TableItem = {
 type DeleteTableButtonProps = {
     table: TableItem;
     onDeleted?: () => void | Promise<void>;
+    onAlert?: (message: string, type: "success" | "error" | "info" | "warning") => void;
 };
 
 const API_BASE = "http://localhost:3001/api";
@@ -17,6 +18,7 @@ const API_BASE = "http://localhost:3001/api";
 export default function DeleteTableButton({
     table,
     onDeleted,
+    onAlert
 }: DeleteTableButtonProps) {
     const handleDelete = async () => {
         const confirmed = window.confirm(
@@ -33,15 +35,16 @@ export default function DeleteTableButton({
 
             if (!res.ok) {
                 console.error("Delete table error:", result);
-                alert(result.message || "ลบโต๊ะไม่สำเร็จ");
+                onAlert?.("ลบโต๊ะไม่สำเร็จ", "error");
                 return;
             }
 
-            alert("ลบโต๊ะสำเร็จ");
+            onAlert?.("ลบโต๊ะสำเร็จ", "success");
             await onDeleted?.();
         } catch (error) {
             console.error("Unexpected delete table error:", error);
-            alert("เกิดข้อผิดพลาด");
+            alert("");
+            onAlert?.("เกิดข้อผิดพลาดในการลบโต๊ะ", "error");
         }
     };
 

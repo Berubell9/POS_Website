@@ -13,6 +13,7 @@ type Category = {
 type Props = {
     value: string;
     onChange: (category: string) => void;
+    refreshKey?: number;
 };
 
 type TabItem = {
@@ -22,7 +23,11 @@ type TabItem = {
 
 const API_BASE = "http://localhost:3001/api";
 
-export default function Tabs({ value, onChange }: Props) {
+export default function Tabs({ 
+    value, 
+    onChange, 
+    refreshKey }: Props) {
+        
     // State
     const [products, setProducts] = useState<Product[]>([]);
     const [categories, setCategories] = useState<Category[]>([]);
@@ -30,7 +35,7 @@ export default function Tabs({ value, onChange }: Props) {
     // แสดงข้อมูลเมื่อเปิดหน้าต่างที่มี Tab ขึ้นมา
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [refreshKey]);
     
     // ดึงข้อมูล
     const fetchData = async () => {

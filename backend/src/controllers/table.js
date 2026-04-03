@@ -1,6 +1,9 @@
 import supabase from "../services/supabase.js";
 
-// GET /api/tables
+/*
+ * GET /api/tables
+ * ดึงข้อมูลโต๊ะทั้งหมด
+*/
 export const getTables = async (req, res) => {
     try {
         const { data, error } = await supabase
@@ -24,7 +27,10 @@ export const getTables = async (req, res) => {
     }
 };
 
-// POST /api/tables
+/*
+ * POST /api/tables
+ * เพิ่มโต๊ะใหม่
+*/
 export const createTable = async (req, res) => {
     try {
         const { table_number, is_active } = req.body;
@@ -65,7 +71,10 @@ export const createTable = async (req, res) => {
     }
 };
 
-// PUT /api/tables/:id
+/*
+ * PUT /api/tables/:id
+ * เเก้ไขข้อมูลโต๊ะ
+*/
 export const updateTable = async (req, res) => {
     try {
         const { id } = req.params;
@@ -106,7 +115,10 @@ export const updateTable = async (req, res) => {
     }
 };
 
-// DELETE /api/tables/:id
+/*
+ * DELETE /api/tables/:id
+ * ลบโต๊ะ
+*/
 export const deleteTable = async (req, res) => {
     try {
         const { id } = req.params;

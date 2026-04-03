@@ -4,11 +4,15 @@ import PlaylistAddOutlinedIcon from "@mui/icons-material/PlaylistAddOutlined";
 
 type AddTableButtonProps = {
     onAdded?: () => void | Promise<void>;
+    onAlert?: (message: string, type: "success" | "error" | "info" | "warning") => void;
 };
 
 const API_BASE = "http://localhost:3001/api";
 
-export default function AddTableButton({ onAdded }: AddTableButtonProps) {
+export default function AddTableButton({
+    onAdded,
+    onAlert
+}: AddTableButtonProps) {
     const [open, setOpen] = useState(false);
     const [tableNumber, setTableNumber] = useState("");
     const [isActive, setIsActive] = useState(true);
@@ -26,7 +30,7 @@ export default function AddTableButton({ onAdded }: AddTableButtonProps) {
 
     const handleAddTable = async () => {
         if (!tableNumber.trim()) {
-            alert("กรุณากรอกเลขโต๊ะ");
+            onAlert?.("กรุณากรอกเลขโต๊ะ", "warning");
             return;
         }
 
@@ -48,16 +52,18 @@ export default function AddTableButton({ onAdded }: AddTableButtonProps) {
 
             if (!res.ok) {
                 console.error("Create table error:", result);
-                alert(result.message || "เพิ่มโต๊ะไม่สำเร็จ");
+                onAlert?.("เพิ่มโต๊ะไม่สำเร็จ", "error");
                 return;
             }
 
-            alert("เพิ่มโต๊ะสำเร็จ");
+            onAlert?.("เพิ่มโต๊ะสำเร็จ", "success");
             handleClose();
             await onAdded?.();
         } catch (error) {
             console.error("Unexpected create table error:", error);
-            alert("เกิดข้อผิดพลาด");
+            alert("");
+            onAlert?.("เกิดข้อผิดพลาดในการเพิ่มโต๊ะ", "error");
+
         } finally {
             setLoading(false);
         }
@@ -74,10 +80,7 @@ export default function AddTableButton({ onAdded }: AddTableButtonProps) {
             </button>
 
             {open && (
-                <div
-                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
-                    onClick={handleClose}
-                >
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
                     <div
                         className="w-full max-w-md rounded-xl bg-white p-6 shadow-lg"
                         onClick={(e) => e.stopPropagation()}

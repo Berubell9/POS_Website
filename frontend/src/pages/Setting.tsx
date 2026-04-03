@@ -15,8 +15,10 @@ export default function Setting() {
                     <p className="text-3xl font-extrabold">ตั้งค่า</p>
                 </div>
 
-                {/* Content */}
+                {/* ตารางหมวดหมู่ */}
                 <CategoriesItemTable/>
+
+                {/* ตารางโต๊ะ */}
                 <TableItemTable/>
             </div>
         </div>

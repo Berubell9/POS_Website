@@ -16,21 +16,29 @@ type Order = {
 
 type StatusCardProps = {
     refreshKey?: number;
+    onAlert?: (message: string, type: "success" | "error" | "info" | "warning") => void;
+
 };
 
+// ให้เงินมีลูกน้ำคั่น
 const formatMoney = (value: number) =>
     Number(value || 0).toLocaleString("th-TH", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
     });
 
-export default function StatusCard({ refreshKey }: StatusCardProps) {
+export default function StatusCard({ 
+    refreshKey,
+    onAlert,
+}: StatusCardProps) {
+
     const [orders, setOrders] = useState<Order[]>([]);
 
     useEffect(() => {
         fetchOrders();
     }, [refreshKey]);
 
+    // ดึงข้อมูลออเดอร์
     const fetchOrders = async () => {
         try {
             const res = await fetch(`${API_BASE}/orders`);
@@ -38,6 +46,8 @@ export default function StatusCard({ refreshKey }: StatusCardProps) {
             setOrders(data || []);
         } catch (err) {
             console.error("fetchOrders error:", err);
+            onAlert?.("ดึงข้อมูลสถานะไม่สำเร็จ", "error");
+            return;
         }
     };
 

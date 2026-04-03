@@ -19,6 +19,7 @@ type ProductCardProps = {
     selectedCategory?: string;
     searchTerm?: string;
     onAddToOrder?: (product: Product) => void;
+    onAlert?: (message: string, type: "success" | "error" | "info" | "warning") => void;
 };
 
 const API_BASE = "http://localhost:3001/api";
@@ -28,12 +29,13 @@ export default function ProductCard({
     selectedCategory = "ทั้งหมด",
     searchTerm = "",
     onAddToOrder,
+    onAlert
 }: ProductCardProps) {
     // State
     const [products, setProducts] = useState<Product[]>([]);
     const [categories, setCategories] = useState<Category[]>([]);
     const [loading, setLoading] = useState(false);
-    
+
     // สั่งให้โหลดข้อมูลตอนเริ่ม render หรือเมื่อ refreshKey เปลี่ยน
     useEffect(() => {
         fetchData();
@@ -51,11 +53,13 @@ export default function ProductCard({
             ]);
 
             if (!productsRes.ok) {
-                throw new Error("โหลดข้อมูลสินค้าไม่สำเร็จ");
+                onAlert?.("โหลดข้อมูลสินค้าไม่สำเร็จ", "error");
+                return;
             }
 
             if (!categoriesRes.ok) {
-                throw new Error("โหลดข้อมูลหมวดหมู่ไม่สำเร็จ");
+                onAlert?.("โหลดข้อมูลหมวดหมู่ไม่สำเร็จ", "error");
+                return;
             }
 
             const productsData = await productsRes.json();
@@ -66,6 +70,7 @@ export default function ProductCard({
             setCategories(categoriesData || []);
         } catch (error) {
             console.error("Unexpected fetch error:", error);
+            onAlert?.("ลบเมนูไม่สำเร็จ", "error");
         } finally {
             setLoading(false);
         }

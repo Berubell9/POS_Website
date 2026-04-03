@@ -12,6 +12,8 @@ type TableItem = {
 type EditTableButtonProps = {
     table: TableItem;
     onUpdated?: () => void | Promise<void>;
+    onAlert?: (message: string, type: "success" | "error" | "info" | "warning") => void;
+
 };
 
 const API_BASE = "http://localhost:3001/api";
@@ -19,6 +21,7 @@ const API_BASE = "http://localhost:3001/api";
 export default function EditTableButton({
     table,
     onUpdated,
+    onAlert
 }: EditTableButtonProps) {
     const [open, setOpen] = useState(false);
     const [tableNumber, setTableNumber] = useState(table.table_number);
@@ -37,7 +40,7 @@ export default function EditTableButton({
 
     const handleUpdate = async () => {
         if (!tableNumber.trim()) {
-            alert("กรุณากรอกเลขโต๊ะ");
+            onAlert?.("กรุณากรอกเลขโต๊ะ", "warning");
             return;
         }
 
@@ -59,16 +62,16 @@ export default function EditTableButton({
 
             if (!res.ok) {
                 console.error("Update table error:", result);
-                alert(result.message || "แก้ไขโต๊ะไม่สำเร็จ");
+                onAlert?.("แก้ไขโต๊ะไม่สำเร็จ", "error");
                 return;
             }
 
-            alert("แก้ไขโต๊ะสำเร็จ");
+            onAlert?.("แก้ไขโต๊ะสำเร็จ", "success");
             setOpen(false);
             await onUpdated?.();
         } catch (error) {
             console.error("Unexpected update table error:", error);
-            alert("เกิดข้อผิดพลาด");
+            onAlert?.("เกิดข้อผิดพลาดในการเเก้ไขโต๊ะ", "error")
         } finally {
             setLoading(false);
         }
@@ -85,10 +88,7 @@ export default function EditTableButton({
             </button>
 
             {open && (
-                <div
-                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
-                    onClick={handleClose}
-                >
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
                     <div
                         className="w-full max-w-md rounded-xl bg-white p-6 shadow-lg"
                         onClick={(e) => e.stopPropagation()}
@@ -113,7 +113,7 @@ export default function EditTableButton({
                                     className="mt-1 w-full rounded-md border border-gray-200 p-2 text-gray-500 font-light outline-none"
                                 />
                             </div>
-                            
+
                             {/* สถานะ */}
                             <div className="flex flex-col items-start">
                                 <label className="block font-bold">สถานะ</label>

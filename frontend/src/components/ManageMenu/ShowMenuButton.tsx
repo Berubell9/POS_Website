@@ -11,18 +11,23 @@ type Product = {
 };
 
 type Category = {
-  id: number;
-  name: string;
+    id: number;
+    name: string;
 };
 
 type Props = {
     product: Product;
     onUpdated?: () => void;
+    onAlert?: (message: string, type: "success" | "error" | "info" | "warning") => void;
 };
 
 const API_BASE = "http://localhost:3001/api";
 
-export default function ShowMenuButton({ product }: Props) {
+export default function ShowMenuButton({
+    product,
+    onAlert,
+}: Props) {
+
     // Open Modal
     const [open, setOpen] = useState(false);
     const [categoryName, setCategoryName] = useState("");
@@ -40,7 +45,8 @@ export default function ShowMenuButton({ product }: Props) {
             const res = await fetch(`${API_BASE}/categories`);
 
             if (!res.ok) {
-                throw new Error("โหลดหมวดหมู่ไม่สำเร็จ");
+                onAlert?.("โหลดข้อมูลหมวดหมู่ไม่สำเร็จ", "error");
+                return;
             }
 
             const data: Category[] = await res.json();
@@ -49,6 +55,7 @@ export default function ShowMenuButton({ product }: Props) {
             setCategoryName(found ? found.name : "-");
         } catch (error) {
             console.error("Error fetching categories:", error);
+            onAlert?.("ดึงข้อมูลหมวดหมูไม่สำเร็จ", "error");
             setCategoryName("-");
         }
     };
@@ -67,10 +74,7 @@ export default function ShowMenuButton({ product }: Props) {
             {/* Modal */}
             {open && (
                 // พื้นหลังดำ
-                <div
-                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
-                    onClick={() => setOpen(false)}
-                >
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
                     {/* พื้นหลังขวา */}
                     <div
                         className="w-full max-w-lg rounded-xl bg-white p-6 shadow-lg"

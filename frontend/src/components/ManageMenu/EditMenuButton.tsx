@@ -19,6 +19,7 @@ type Product = {
 type EditMenuButtonProps = {
     product: Product;
     onUpdated?: () => void;
+    onAlert?: (message: string, type: "success" | "error" | "info" | "warning") => void;
 };
 
 const API_BASE = "http://localhost:3001/api";
@@ -26,6 +27,7 @@ const API_BASE = "http://localhost:3001/api";
 export default function EditMenuButton({
     product,
     onUpdated,
+    onAlert,
 }: EditMenuButtonProps) {
     // Open Modal
     const [open, setOpen] = useState(false);
@@ -60,13 +62,16 @@ export default function EditMenuButton({
             const res = await fetch(`${API_BASE}/categories`);
 
             if (!res.ok) {
-                throw new Error("โหลดหมวดหมู่ไม่สำเร็จ");
+                onAlert?.("โหลดข้อมูลหมวดหมู่ไม่สำเร็จ", "error");
+                return;
             }
 
             const data = await res.json();
             setCategories(data || []);
         } catch (error) {
             console.error("Error fetching categories:", error);
+            onAlert?.("ดึงข้อมูลหมวดหมู่ไม่สำเร็จ", "error");
+            return;
         }
     };
 
@@ -83,17 +88,17 @@ export default function EditMenuButton({
     // เมื่อกดปุ่มบันทึก จะมีแจ้งเตือน Error เมื่อใส่ข้อมูลไม่ครบ
     const handleUpdate = async () => {
         if (!productName.trim()) {
-            alert("กรุณากรอกชื่อเมนู");
+            onAlert?.("กรุณากรอกชื่อเมนู", "warning");
             return;
         }
 
         if (!productCategoryId) {
-            alert("กรุณาเลือกหมวดหมู่");
+            onAlert?.("กรุณาเลือกหมวดหมู่", "warning");
             return;
         }
 
         if (!productPrice.trim() || isNaN(Number(productPrice))) {
-            alert("กรุณากรอกราคาให้ถูกต้อง");
+            onAlert?.("กรุณากรอกราคาให้ถูกต้อง", "warning");
             return;
         }
 
@@ -102,12 +107,11 @@ export default function EditMenuButton({
 
             let imageUrl = product.image;
 
-
             // ถ้ามีเลือกรูปใหม่ ให้อัปโหลดรูปใหม่
             if (newImageFile) {
                 const formData = new FormData();
                 formData.append("image", newImageFile);
-                
+
                 // Upload Image ลงใน Storage (Bucket) ชื่อ product-images
                 const uploadRes = await fetch(`${API_BASE}/product-images`, {
                     method: "POST",
@@ -118,8 +122,7 @@ export default function EditMenuButton({
 
                 if (!uploadRes.ok) {
                     console.error("Upload image error:", uploadResult);
-                    alert(uploadResult.message || "อัปโหลดรูปใหม่ไม่สำเร็จ");
-                    return;
+                    onAlert?.("อัปโหลดรูปใหม่ไม่สำเร็จ", "error");
                 }
 
                 imageUrl = uploadResult.publicUrl;
@@ -143,16 +146,16 @@ export default function EditMenuButton({
 
             if (!updateRes.ok) {
                 console.error("Update product error:", updateResult);
-                alert(updateResult.message || "แก้ไขเมนูไม่สำเร็จ");
+                onAlert?.("แก้ไขเมนูไม่สำเร็จ", "error");
                 return;
             }
 
-            alert("แก้ไขเมนูสำเร็จ");
+            onAlert?.("แก้ไขเมนูสำเร็จ", "success");
             setOpen(false);
             await onUpdated?.();
         } catch (error) {
             console.error("Unexpected update error:", error);
-            alert("เกิดข้อผิดพลาด");
+            onAlert?.("เกิดข้อผิดพลาดในการอัปเดตเมนู", "error");
         } finally {
             setLoading(false);
         }
@@ -171,14 +174,16 @@ export default function EditMenuButton({
 
             {/* Modal */}
             {open && (
-                <div
-                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
-                    onClick={() => setOpen(false)}
-                >
+                // พื้นหลังดำ
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+                    
+                    {/* พื้นหลังขวา */}
                     <div
                         className="w-full max-w-lg rounded-xl bg-white p-6 shadow-lg"
                         onClick={(e) => e.stopPropagation()}
                     >
+
+                        {/* Header */}
                         <div className="flex items-center">
                             <EditNoteOutlinedIcon sx={{ fontSize: 30 }} className="text-pink-400" />
                             <p className="ml-1 text-2xl font-extrabold">แก้ไขเมนู</p>

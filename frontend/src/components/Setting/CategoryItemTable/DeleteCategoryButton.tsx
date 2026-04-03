@@ -8,6 +8,7 @@ type Category = {
 type DeleteCategoryButtonProps = {
     category: Category;
     onDeleted?: () => void | Promise<void>;
+    onAlert?: (message: string, type: "success" | "error" | "info" | "warning") => void;
 };
 
 const API_BASE = "http://localhost:3001/api";
@@ -15,11 +16,10 @@ const API_BASE = "http://localhost:3001/api";
 export default function DeleteCategoryButton({
     category,
     onDeleted,
+    onAlert
 }: DeleteCategoryButtonProps) {
     const handleDelete = async () => {
-        const confirmed = window.confirm(
-            `ต้องการลบหมวดหมู่ "${category.name}" ใช่หรือไม่`
-        );
+        const confirmed = window.confirm(`ต้องการลบหมวดหมู่ "${category.name}" ใช่หรือไม่`);
         if (!confirmed) return;
 
         try {
@@ -31,15 +31,15 @@ export default function DeleteCategoryButton({
 
             if (!res.ok) {
                 console.error("Delete category error:", result);
-                alert(result.message || "ลบหมวดหมู่ไม่สำเร็จ");
+                onAlert?.("ลบข้อมูลหมวดหมู่ไม่สำเร็จ", "error");
                 return;
             }
 
-            alert("ลบหมวดหมู่สำเร็จ");
+            onAlert?.("ลบข้อมูลหมวดหมู่สำเร็จ", "success");
             await onDeleted?.();
         } catch (error) {
             console.error("Unexpected delete category error:", error);
-            alert("เกิดข้อผิดพลาด");
+            onAlert?.("เกิดข้อผิดพลาดในการลบข้อมูลหมวดหมู่", "error");
         }
     };
 

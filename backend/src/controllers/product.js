@@ -5,7 +5,6 @@ import supabase from "../services/supabase.js";
 /*
  * GET /api/products
  * ดึงสินค้าทั้งหมด
- * (Get all products)
 */
 export const getProducts = async (req, res) => {
     try {
@@ -28,7 +27,6 @@ export const getProducts = async (req, res) => {
 /*
  * GET /api/products/:id
  * ดึงสินค้าตาม id 
- * (Get product by ID)
  */
 export const getProductById = async (req, res) => {
     const { id } = req.params;
@@ -54,7 +52,6 @@ export const getProductById = async (req, res) => {
 /*
  * POST /api/products
  * เพิ่มสินค้าใหม่ 
- * (Create a new product)
  */
 export const createProduct = async (req, res) => {
     const { name, price, image, category_id } = req.body;
@@ -87,7 +84,6 @@ export const createProduct = async (req, res) => {
 /*
  * PUT /api/products/:id
  * แก้ไขสินค้า 
- * (Update a product by ID)
  */
 export const updateProduct = async (req, res) => {
     const { id } = req.params;
@@ -128,7 +124,6 @@ export const updateProduct = async (req, res) => {
 /*
  * DELETE /api/products/:id
  * ลบสินค้า 
- * (Delete a product by ID)
  */
 export const deleteProduct = async (req, res) => {
     const { id } = req.params;

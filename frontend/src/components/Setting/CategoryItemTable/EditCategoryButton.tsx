@@ -10,6 +10,7 @@ type Category = {
 type EditCategoryButtonProps = {
     category: Category;
     onUpdated?: () => void | Promise<void>;
+    onAlert?: (message: string, type: "success" | "error" | "info" | "warning") => void;
 };
 
 const API_BASE = "http://localhost:3001/api";
@@ -17,6 +18,7 @@ const API_BASE = "http://localhost:3001/api";
 export default function EditCategoryButton({
     category,
     onUpdated,
+    onAlert
 }: EditCategoryButtonProps) {
     const [open, setOpen] = useState(false);
     const [categoryName, setCategoryName] = useState(category.name);
@@ -33,7 +35,7 @@ export default function EditCategoryButton({
 
     const handleUpdate = async () => {
         if (!categoryName.trim()) {
-            alert("กรุณากรอกชื่อหมวดหมู่");
+            onAlert?.("กรุณากรอกชื่อหมวดหมู่", "warning");
             return;
         }
 
@@ -54,16 +56,17 @@ export default function EditCategoryButton({
 
             if (!res.ok) {
                 console.error("Update category error:", result);
-                alert(result.message || "แก้ไขหมวดหมู่ไม่สำเร็จ");
+                alert(result.message || "");
+                onAlert?.("แก้ไขข้อมูลหมวดหมู่ไม่สำเร็จ", "error");
                 return;
             }
 
-            alert("แก้ไขหมวดหมู่สำเร็จ");
+            onAlert?.("แก้ไขข้อมูลหมวดหมู่สำเร็จ", "success");
             setOpen(false);
             await onUpdated?.();
         } catch (error) {
             console.error("Unexpected update category error:", error);
-            alert("เกิดข้อผิดพลาด");
+            onAlert?.("เกิดข้อผิดพลาดในการเเก้ไขข้อมูลหมวดหมู่", "error");
         } finally {
             setLoading(false);
         }
@@ -79,11 +82,9 @@ export default function EditCategoryButton({
                 <p className="ml-1 hidden sm:inline">แก้ไข</p>
             </button>
 
+            {/* Modal */}
             {open && (
-                <div
-                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
-                    onClick={handleClose}
-                >
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
                     <div
                         className="w-full max-w-md rounded-xl bg-white p-6 shadow-lg"
                         onClick={(e) => e.stopPropagation()}

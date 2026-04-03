@@ -18,12 +18,14 @@ export default function ManageMenu() {
                     <p className="text-3xl font-extrabold">จัดการเมนู</p>
                 </div>
 
-                {/* Content */}
+                {/* หมวดหมู่ */}
                 <Tabs
+                    refreshKey={refreshKey}
                     value={selectedCategory}
                     onChange={setSelectedCategory}
                 />
 
+                {/* ตารางเมนู */}
                 <ProductItemTable
                     refreshKey={refreshKey}
                     selectedCategory={selectedCategory}

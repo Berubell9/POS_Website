@@ -2,7 +2,6 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
 import InfoIcon from "@mui/icons-material/Info";
 import WarningIcon from "@mui/icons-material/Warning";
-import CloseIcon from "@mui/icons-material/Close";
 
 type AlertProps = {
     message: string;
@@ -12,28 +11,20 @@ type AlertProps = {
 
 const config = {
     success: {
-        bg: "bg-green-50",
-        text: "text-green-700",
-        border: "border-green-200",
-        icon: <CheckCircleIcon className="text-green-500" />,
+        text: "text-green-500",
+        icon: <CheckCircleIcon className="text-green-500" sx={{ fontSize: 80 }}/>,
     },
     error: {
-        bg: "bg-red-50",
-        text: "text-red-700",
-        border: "border-red-200",
-        icon: <ErrorIcon className="text-red-500" />,
+        text: "text-gray-400",
+        icon: <ErrorIcon className="text-red-500" sx={{ fontSize: 80 }} />,
     },
     info: {
-        bg: "bg-blue-50",
         text: "text-blue-700",
-        border: "border-blue-200",
-        icon: <InfoIcon className="text-blue-500" />,
+        icon: <InfoIcon className="text-blue-500" sx={{ fontSize: 80 }}/>,
     },
     warning: {
-        bg: "bg-yellow-50",
         text: "text-yellow-800",
-        border: "border-yellow-200",
-        icon: <WarningIcon className="text-yellow-500" />,
+        icon: <WarningIcon className="text-yellow-500" sx={{ fontSize: 80 }}/>,
     },
 };
 
@@ -45,25 +36,24 @@ export default function Alert({
     const style = config[type];
 
     return (
-        <div
-            className={`fixed top-4 right-4 z-50 flex items-center gap-3 rounded-xl border px-4 py-3 shadow-md transition-all
-            ${style.bg} ${style.text} ${style.border}`}
-        >
-            {/* icon */}
-            <div className="shrink-0">{style.icon}</div>
+        <div className="fixed inset-0 z-100 flex items-center justify-center bg-black/20 px-4">
+            <div
+                className={`relative flex w-full max-w-sm flex-col items-center rounded-2xl p-6 bg-white text-center shadow-xl 
+                    ${style.text}`}
+            >
+                <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full">{style.icon}</div>
 
-            {/* message */}
-            <p className="text-sm font-medium">{message}</p>
+                <p className="text-xl font-extrabold">{message}</p>
 
-            {/* close */}
-            {onClose && (
-                <button
-                    onClick={onClose}
-                    className="ml-2 text-gray-400 hover:text-gray-600"
-                >
-                    <CloseIcon fontSize="small" />
-                </button>
-            )}
+                {onClose && (
+                    <button
+                        onClick={onClose}
+                        className="mt-5 rounded-md border border-red-500 bg-red-50 px-5 py-2 font-semibold text-red-500 transition hover:bg-red-100"
+                    >
+                        ปิด
+                    </button>
+                )}
+            </div>
         </div>
     );
 }

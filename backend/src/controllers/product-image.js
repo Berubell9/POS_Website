@@ -1,6 +1,7 @@
 import supabase from "../services/supabase.js";
 import multer from "multer";
 
+// เก็บ url รูปที่อัพโหลดลงบน Bucket หรือ storage ชื่อ product-images
 const upload = multer({ storage: multer.memoryStorage() });
 
 export const uploadMiddleware = upload.single("image");

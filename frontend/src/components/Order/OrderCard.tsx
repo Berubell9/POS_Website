@@ -1,4 +1,4 @@
-import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
+import StarOutlinedIcon from '@mui/icons-material/StarOutlined';
 import LocalPrintshopOutlinedIcon from "@mui/icons-material/LocalPrintshopOutlined";
 
 type OrderItem = {
@@ -86,7 +86,7 @@ export default function OrderCard({
                 <div
                     className={`flex shrink-0 items-center gap-1 rounded-full px-2 py-1 text-sm whitespace-nowrap ${statusClassName}`}
                 >
-                    <AccessTimeOutlinedIcon sx={{ fontSize: 16 }} />
+                    <StarOutlinedIcon sx={{ fontSize: 16 }} />
                     <p>{status}</p>
                 </div>
             </div>

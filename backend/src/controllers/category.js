@@ -3,7 +3,6 @@ import supabase from "../services/supabase.js";
 /*
  * GET /api/categories
  * ดึงข้อมูลหมวดหมู่ทั้งหมด
- * (Get all categories)
 */
 export const getCategories = async (req, res) => {
     try {
@@ -32,7 +31,6 @@ export const getCategories = async (req, res) => {
 /*
  * GET /api/categories/:id
  * ดึงข้อมูลหมวดหมู่ตาม id
- * (Get all category by ID)
 */
 export const getCategoryById = async (req, res) => {
     try {
@@ -61,7 +59,6 @@ export const getCategoryById = async (req, res) => {
 /*
  * POST /api/categories
  * เพิ่มหมวดหมู่ใหม่
- * (Create a new category)
 */
 export const createCategory = async (req, res) => {
     try {
@@ -103,7 +100,6 @@ export const createCategory = async (req, res) => {
 /*
  * PUT /api/categories/:id
  * เเก้ไขหมวดหมู่
- * (Update category by ID)
 */
 export const updateCategory = async (req, res) => {
     try {
@@ -147,7 +143,6 @@ export const updateCategory = async (req, res) => {
 /*
  * DELETE /api/categories/:id
  * ลบหมวดหมู่
- * (Delete a cetegory by ID)
 */
 export const deleteCategory = async (req, res) => {
     try {

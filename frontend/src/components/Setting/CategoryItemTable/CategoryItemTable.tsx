@@ -5,7 +5,8 @@ import AddCategoryButton from './AddCategoryButton'
 import EditCategoryButton from './EditCategoryButton'
 import DeleteCategoryButton from './DeleteCategoryButton'
 import SearchBar from '../SearchBar'
-import Pagination from '../Pagination'
+import Pagination from '../../Pagination'
+import Alert from "../../../components/Alert";
 
 type Category = {
     id: number;
@@ -26,7 +27,7 @@ type CategoriesItemTableProps = {
 
 const API_BASE = "http://localhost:3001/api";
 
-export default function CategoryItemTable({ 
+export default function CategoryItemTable({
     refreshKey,
 }: CategoriesItemTableProps) {
     // State
@@ -34,6 +35,12 @@ export default function CategoryItemTable({
     const [products, setProducts] = useState<Product[]>([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [loading, setLoading] = useState(false);
+
+    // Notion State
+    const [alert, setAlert] = useState<{
+        message: string;
+        type: "success" | "error" | "info" | "warning";
+    } | null>(null);
 
     const itemsPerPage = 5;
     const [currentPage, setCurrentPage] = useState(1);
@@ -55,11 +62,19 @@ export default function CategoryItemTable({
             ]);
 
             if (!productsRes.ok) {
-                throw new Error("โหลดข้อมูลสินค้าไม่สำเร็จ");
+                setAlert({
+                    message: "โหลดข้อมูลสินค้าไม่สำเร็จ",
+                    type: "error",
+                });
+                return;
             }
 
             if (!categoriesRes.ok) {
-                throw new Error("โหลดข้อมูลหมวดหมู่ไม่สำเร็จ");
+                setAlert({
+                    message: "โหลดข้อมูลหมวดหมู่ไม่สำเร็จ",
+                    type: "error",
+                });
+                return;
             }
 
             const productsData = await productsRes.json();
@@ -71,6 +86,10 @@ export default function CategoryItemTable({
             setCurrentPage(1);
         } catch (error) {
             console.error("Unexpected fetch error:", error);
+            setAlert({
+                message: "ดึงข้อมูลไม่สำเร็จ",
+                type: "error",
+            });
         } finally {
             setLoading(false);
         }
@@ -104,6 +123,15 @@ export default function CategoryItemTable({
 
     return (
         <div className="mt-4 overflow-hidden rounded-xl bg-white shadow-sm">
+            {/* เเจ้งเตือน */}
+            {alert && (
+                <Alert
+                    message={alert.message}
+                    type={alert.type}
+                    onClose={() => setAlert(null)}
+                />
+            )}
+
             {/* หัวตาราง */}
             <div className="flex flex-col gap-3 px-4 py-3 md:flex-row md:items-center md:justify-between">
                 {/* Title */}
@@ -122,7 +150,10 @@ export default function CategoryItemTable({
                             }}
                         />
                     </div>
-                    <AddCategoryButton onAdded={fetchData} />
+                    <AddCategoryButton
+                        onAdded={fetchData}
+                        onAlert={(message, type) => setAlert({ message, type })}
+                    />
                 </div>
             </div>
 
@@ -165,10 +196,18 @@ export default function CategoryItemTable({
                             <td className="px-4 py-3">
                                 <div className="flex items-center justify-center gap-2">
                                     {/* ปุ่มเเก้ไขหมวดหมู่ */}
-                                    <EditCategoryButton category={category} onUpdated={fetchData} />
+                                    <EditCategoryButton
+                                        category={category}
+                                        onUpdated={fetchData}
+                                        onAlert={(message, type) => setAlert({ message, type })}
+                                    />
 
                                     {/* ปุ่มลบหมวดหมู่ */}
-                                    <DeleteCategoryButton category={category} onDeleted={fetchData} />
+                                    <DeleteCategoryButton
+                                        category={category}
+                                        onDeleted={fetchData}
+                                        onAlert={(message, type) => setAlert({ message, type })}
+                                    />
                                 </div>
                             </td>
                         </tr>

@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import FormatListBulletedOutlinedIcon from "@mui/icons-material/FormatListBulletedOutlined";
+
 import SearchBar from "../SearchBar";
-import Pagination from "../Pagination";
+import Pagination from "../../Pagination";
 import AddTableButton from "./AddTableButton";
 import EditTableButton from "./EditTableButton";
 import DeleteTableButton from "./DeleteTableButton";
+import Alert from "../../../components/Alert";
 
 type TableItem = {
     id: number;
@@ -23,6 +25,12 @@ export default function TableItemTable({ refreshKey }: TableItemTableProps) {
     const [tables, setTables] = useState<TableItem[]>([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [loading, setLoading] = useState(false);
+
+    // Notion State
+    const [alert, setAlert] = useState<{
+        message: string;
+        type: "success" | "error" | "info" | "warning";
+    } | null>(null);
 
     const itemsPerPage = 5;
     const [currentPage, setCurrentPage] = useState(1);
@@ -67,6 +75,15 @@ export default function TableItemTable({ refreshKey }: TableItemTableProps) {
 
     return (
         <div className="mt-4 overflow-hidden rounded-xl bg-white shadow-sm">
+            {/* เเจ้งเตือน */}
+            {alert && (
+                <Alert
+                    message={alert.message}
+                    type={alert.type}
+                    onClose={() => setAlert(null)}
+                />
+            )}
+
             <div className="flex flex-col gap-3 px-4 py-3 md:flex-row md:items-center md:justify-between">
                 <div className="flex items-center">
                     <FormatListBulletedOutlinedIcon className="mr-2 text-pink-400" />

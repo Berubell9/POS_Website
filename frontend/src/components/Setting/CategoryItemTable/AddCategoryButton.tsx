@@ -4,12 +4,15 @@ import PlaylistAddOutlinedIcon from "@mui/icons-material/PlaylistAddOutlined";
 
 type AddCategoryButtonProps = {
   onAdded?: () => void | Promise<void>;
+  onAlert?: (message: string, type: "success" | "error" | "info" | "warning") => void;
+
 };
 
 const API_BASE = "http://localhost:3001/api";
 
 export default function AddCategoryButton({
   onAdded,
+  onAlert
 }: AddCategoryButtonProps) {
   const [open, setOpen] = useState(false);
   const [categoryName, setCategoryName] = useState("");
@@ -26,7 +29,7 @@ export default function AddCategoryButton({
 
   const handleAddCategory = async () => {
     if (!categoryName.trim()) {
-      alert("กรุณากรอกชื่อหมวดหมู่");
+      onAlert?.("กรุณากรอกชื่อหมวดหมู่", "warning");
       return;
     }
 
@@ -47,16 +50,16 @@ export default function AddCategoryButton({
 
       if (!res.ok) {
         console.error("Create category error:", result);
-        alert(result.message || "เพิ่มหมวดหมู่ไม่สำเร็จ");
+        onAlert?.("เพิ่มข้อมูลหมวดหมู่ไม่สำเร็จ", "error");
         return;
       }
 
-      alert("เพิ่มหมวดหมู่สำเร็จ");
+      onAlert?.("เพิ่มข้อมูลหมวดหมู่สำเร็จ", "success");
       handleClose();
       await onAdded?.();
     } catch (error) {
       console.error("Unexpected create category error:", error);
-      alert("เกิดข้อผิดพลาด");
+      onAlert?.("เกิดข้อผิดพลาดในการเพิ่มข้อมูลหมวดหมู่", "error");
     } finally {
       setLoading(false);
     }
@@ -75,10 +78,7 @@ export default function AddCategoryButton({
 
       {/* Modal */}
       {open && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
-          onClick={handleClose}
-        >
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
           <div
             className="w-full max-w-md rounded-xl bg-white p-6 shadow-lg"
             onClick={(e) => e.stopPropagation()}

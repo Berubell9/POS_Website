@@ -1,11 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 import DeleteMenuButton from "./DeleteMenuButton";
 import EditMenuButton from "./EditMenuButton";
-import Pagination from "./Pagination";
-import FormatListBulletedOutlinedIcon from '@mui/icons-material/FormatListBulletedOutlined';
+import Pagination from "../Pagination";
 import AddMenuButton from "./AddMenuButton";
 import SearchBar from "./SearchBar";
 import ShowMenuButton from "./ShowMenuButton";
+import Alert from "../../components/Alert";
+
+import FormatListBulletedOutlinedIcon from '@mui/icons-material/FormatListBulletedOutlined';
 
 type Product = {
     id: number;
@@ -33,6 +35,7 @@ export default function ProductItemTable({
     // props ที่ส่งเข้ามา มาใช้งานใน component
     refreshKey,
     selectedCategory,
+    onAdded,
 }: ProductItemProps) {
     // State
     const [products, setProducts] = useState<Product[]>([]);
@@ -40,10 +43,16 @@ export default function ProductItemTable({
     const [searchTerm, setSearchTerm] = useState("");
     const [loading, setLoading] = useState(false);
 
-    // State ของ Pagination กำหนดไว้มาถ้ามี 5 เมนูขึ้นไปในตารางให้ตัดไปหน้าถัดไป
-    const itemsPerPage = 5;
+    // State ของ Pagination กำหนดไว้มาถ้ามี 6 เมนูขึ้นไปในตารางให้ตัดไปหน้าถัดไป
+    const itemsPerPage = 6;
     // State ของหน้าปัจจุบัน
     const [currentPage, setCurrentPage] = useState(1);
+
+    // Notion State
+    const [alert, setAlert] = useState<{
+        message: string;
+        type: "success" | "error" | "info" | "warning";
+    } | null>(null);
 
     // สั่งให้โหลดข้อมูลตอนเริ่ม render หรือเมื่อ refreshKey เปลี่ยน
     useEffect(() => {
@@ -62,11 +71,19 @@ export default function ProductItemTable({
             ]);
 
             if (!productsRes.ok) {
-                throw new Error("โหลดข้อมูลสินค้าไม่สำเร็จ");
+                setAlert({
+                    message: "โหลดข้อมูลสินค้าไม่สำเร็จ",
+                    type: "error",
+                });
+                return;
             }
 
             if (!categoriesRes.ok) {
-                throw new Error("โหลดข้อมูลหมวดหมู่ไม่สำเร็จ");
+                setAlert({
+                    message: "โหลดข้อมูลหมวดหมู่ไม่สำเร็จ",
+                    type: "error",
+                });
+                return;
             }
 
             const productsData = await productsRes.json();
@@ -78,6 +95,10 @@ export default function ProductItemTable({
             setCurrentPage(1);
         } catch (error) {
             console.error("Unexpected fetch error:", error);
+            setAlert({
+                message: "โหลดข้อมูลไม่สำเร็จ",
+                type: "error",
+            });
         } finally {
             setLoading(false);
         }
@@ -123,6 +144,15 @@ export default function ProductItemTable({
 
     return (
         <div className="mt-4 overflow-hidden rounded-xl bg-white shadow-sm">
+            {/* เเจ้งเตือน */}
+            {alert && (
+                <Alert
+                    message={alert.message}
+                    type={alert.type}
+                    onClose={() => setAlert(null)}
+                />
+            )}
+
             {/* หัวตาราง */}
             <div className="flex flex-col gap-3 px-4 py-3 md:flex-row md:items-center md:justify-between">
                 {/* Title */}
@@ -134,6 +164,7 @@ export default function ProductItemTable({
                 {/* Actions */}
                 <div className="flex items-center gap-3 w-full sm:w-auto">
                     <div className="flex-1 sm:flex-none">
+                        {/* ค้นหาเมนู */}
                         <SearchBar
                             value={searchTerm}
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -142,7 +173,13 @@ export default function ProductItemTable({
                             }}
                         />
                     </div>
-                    <AddMenuButton onAdded={fetchData} />
+                    {/* ปุ่มเพิ่มเมนู */}
+                    <AddMenuButton
+                        onAdded={() => {
+                            fetchData();
+                            onAdded?.();
+                        }}
+                    />
                 </div>
             </div>
 
@@ -202,13 +239,30 @@ export default function ProductItemTable({
                             <td className="px-4 py-3">
                                 <div className="flex items-center justify-center gap-2">
                                     {/* ปุ่มเเสดงเมนู */}
-                                    <ShowMenuButton product={product} onUpdated={fetchData} />
+                                    <ShowMenuButton
+                                        product={product}
+                                        onUpdated={() => {
+                                            fetchData();
+                                            onAdded?.();
+                                        }} onAlert={(message, type) => setAlert({ message, type })} />
 
                                     {/* ปุ่มเเก้ไขเมนู */}
-                                    <EditMenuButton product={product} onUpdated={fetchData} />
+                                    <EditMenuButton
+                                        product={product}
+                                        onUpdated={() => {
+                                            fetchData();
+                                            onAdded?.();
+                                        }}
+                                        onAlert={(message, type) => setAlert({ message, type })}
+                                    />
 
                                     {/* ปุ่มลบเมนู */}
-                                    <DeleteMenuButton product={product} onDeleted={fetchData} />
+                                    <DeleteMenuButton product={product}
+                                        onDeleted={() => {
+                                            fetchData();
+                                            onAdded?.();
+                                        }} onAlert={(message, type) => setAlert({ message, type })} 
+                                    />
                                 </div>
                             </td>
                         </tr>
