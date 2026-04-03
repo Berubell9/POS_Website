@@ -41,7 +41,7 @@ export default function StatusCard({
     // ดึงข้อมูลออเดอร์
     const fetchOrders = async () => {
         try {
-            const res = await fetch(`${API_BASE}/orders`);
+            const res = await fetch(`${API_BASE}/api/orders`);
             const data = await res.json();
             setOrders(data || []);
         } catch (err) {
