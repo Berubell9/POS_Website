@@ -93,7 +93,7 @@ export default function Home() {
     // อัปเดตสถานะออเดอร์เมื่อกดปุ่ม ขั้นตอนถัด ไปในการ์ด
     const updateOrderStatus = async (orderId: number, nextStatus: string) => {
         try {
-            const res = await fetch(`${API_BASE}/orders/${orderId}/status`, {
+            const res = await fetch(`${API_BASE}/api/orders/${orderId}/status`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
