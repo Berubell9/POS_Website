@@ -7,7 +7,7 @@ import MonthlySalesChart from "../components/Dashboard/MonthlySalesChart";
 import TopSellingMenuChart from "../components/Dashboard/TopSellingMenuChart";
 import Alert from "../components/Alert";
 
-const API_BASE = "http://localhost:3001/api";
+const API_BASE = import.meta.env.VITE_API_BASE;
 
 type DailySalesItem = {
     date: string;
@@ -54,7 +54,7 @@ export default function Dashboard() {
         try {
             setLoading(true);
 
-            const res = await fetch(`${API_BASE}/dashboard/charts`);
+            const res = await fetch(`${API_BASE}/api/dashboard/charts`);
             if (!res.ok) {
                 console.error("fetchDashboardCharts error:", res);
                 setAlert({
