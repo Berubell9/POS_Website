@@ -25,7 +25,7 @@ type Order = {
     qty: number;
 };
 
-const API_BASE = "http://localhost:3001/api";
+const API_BASE = import.meta.env.VITE_API_BASE;
 
 export default function Menu() {
     const [isCartOpen, setIsCartOpen] = useState(false);
@@ -210,7 +210,7 @@ export default function Menu() {
 
             console.log("confirmOrder payload:", payload);
 
-            const res = await fetch(`${API_BASE}/orders`, {
+            const res = await fetch(`${API_BASE}/api/orders`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
