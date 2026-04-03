@@ -25,7 +25,7 @@ type CategoriesItemTableProps = {
     refreshKey?: number;
 };
 
-const API_BASE = "http://localhost:3001/api";
+const API_BASE = import.meta.env.VITE_API_BASE;
 
 export default function CategoryItemTable({
     refreshKey,
@@ -57,8 +57,8 @@ export default function CategoryItemTable({
 
             // ดึงข้อมูลจากในตาราง Products และCategories จาก supabase
             const [productsRes, categoriesRes] = await Promise.all([
-                fetch(`${API_BASE}/products`),
-                fetch(`${API_BASE}/categories`),
+                fetch(`${API_BASE}/api/products`),
+                fetch(`${API_BASE}/api/categories`),
             ]);
 
             if (!productsRes.ok) {
