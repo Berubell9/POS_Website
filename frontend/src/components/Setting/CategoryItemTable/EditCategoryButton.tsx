@@ -13,7 +13,7 @@ type EditCategoryButtonProps = {
     onAlert?: (message: string, type: "success" | "error" | "info" | "warning") => void;
 };
 
-const API_BASE = "http://localhost:3001/api";
+const API_BASE = import.meta.env.VITE_API_BASE;
 
 export default function EditCategoryButton({
     category,
@@ -42,7 +42,7 @@ export default function EditCategoryButton({
         try {
             setLoading(true);
 
-            const res = await fetch(`${API_BASE}/categories/${category.id}`, {
+            const res = await fetch(`${API_BASE}/api/categories/${category.id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
