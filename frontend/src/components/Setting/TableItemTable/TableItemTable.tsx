@@ -19,7 +19,7 @@ type TableItemTableProps = {
     refreshKey?: number;
 };
 
-const API_BASE = "http://localhost:3001/api";
+const API_BASE = import.meta.env.VITE_API_BASE;
 
 export default function TableItemTable({ refreshKey }: TableItemTableProps) {
     const [tables, setTables] = useState<TableItem[]>([]);
@@ -43,7 +43,7 @@ export default function TableItemTable({ refreshKey }: TableItemTableProps) {
         try {
             setLoading(true);
 
-            const res = await fetch(`${API_BASE}/tables`);
+            const res = await fetch(`${API_BASE}/api/tables`);
 
             if (!res.ok) {
                 throw new Error("โหลดข้อมูลโต๊ะไม่สำเร็จ");
