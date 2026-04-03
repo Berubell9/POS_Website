@@ -31,7 +31,7 @@ type OrderRow = {
     items?: OrderItem[];
 };
 
-const API_BASE = import.meta.env.API_BASE;
+const API_BASE = import.meta.env.VITE_API_BASE;
 
 export default function Home() {
     // State
