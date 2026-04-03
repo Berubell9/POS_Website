@@ -22,7 +22,7 @@ type EditMenuButtonProps = {
     onAlert?: (message: string, type: "success" | "error" | "info" | "warning") => void;
 };
 
-const API_BASE = "http://localhost:3001/api";
+const API_BASE = import.meta.env.VITE_API_BASE;
 
 export default function EditMenuButton({
     product,
@@ -59,7 +59,7 @@ export default function EditMenuButton({
     const fetchCategories = async () => {
         try {
             // ดึงข้อมูลจากในตาราง Categories จาก supabase
-            const res = await fetch(`${API_BASE}/categories`);
+            const res = await fetch(`${API_BASE}/api/categories`);
 
             if (!res.ok) {
                 onAlert?.("โหลดข้อมูลหมวดหมู่ไม่สำเร็จ", "error");
@@ -113,7 +113,7 @@ export default function EditMenuButton({
                 formData.append("image", newImageFile);
 
                 // Upload Image ลงใน Storage (Bucket) ชื่อ product-images
-                const uploadRes = await fetch(`${API_BASE}/product-images`, {
+                const uploadRes = await fetch(`${API_BASE}/api/product-images`, {
                     method: "POST",
                     body: formData,
                 });
@@ -129,7 +129,7 @@ export default function EditMenuButton({
             }
 
             // ส่งข้อมูลไปที่ backend เพื่อแก้ไขเมนู id
-            const updateRes = await fetch(`${API_BASE}/products/${product.id}`, {
+            const updateRes = await fetch(`${API_BASE}/api/products/${product.id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
