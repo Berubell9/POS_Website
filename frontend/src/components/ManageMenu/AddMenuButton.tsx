@@ -11,7 +11,7 @@ type AddMenuButtonProps = {
     onAdded?: () => void | Promise<void>;
 };
 
-const API_BASE = "http://localhost:3001/api";
+const API_BASE = import.meta.env.VITE_API_BASE;
 
 export default function AddMenuButton({ onAdded }: AddMenuButtonProps) {
     // Open Modal
@@ -42,7 +42,7 @@ export default function AddMenuButton({ onAdded }: AddMenuButtonProps) {
     // ดึงข้อมูลจากตาราง Categories ใน supabase
     const fetchCategories = async () => {
         try {
-            const res = await fetch(`${API_BASE}/categories`);
+            const res = await fetch(`${API_BASE}/api/categories`);
 
             if (!res.ok) {
                 setAlert({
