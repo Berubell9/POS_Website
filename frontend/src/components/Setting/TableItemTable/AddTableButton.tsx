@@ -7,7 +7,7 @@ type AddTableButtonProps = {
     onAlert?: (message: string, type: "success" | "error" | "info" | "warning") => void;
 };
 
-const API_BASE = "http://localhost:3001/api";
+const API_BASE = import.meta.env.VITE_API_BASE;
 
 export default function AddTableButton({
     onAdded,
@@ -37,7 +37,7 @@ export default function AddTableButton({
         try {
             setLoading(true);
 
-            const res = await fetch(`${API_BASE}/tables`, {
+            const res = await fetch(`${API_BASE}/api/tables`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
