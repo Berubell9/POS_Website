@@ -136,7 +136,7 @@ export default function AddMenuButton({ onAdded }: AddMenuButtonProps) {
             const formData = new FormData();
             formData.append("image", newProductImageFile);
 
-            const uploadRes = await fetch(`${API_BASE}/product-images`, {
+            const uploadRes = await fetch(`${API_BASE}/api/product-images`, {
                 method: "POST",
                 body: formData,
             });
@@ -163,7 +163,7 @@ export default function AddMenuButton({ onAdded }: AddMenuButtonProps) {
                 is_available: true,
             };
 
-            const createRes = await fetch(`${API_BASE}/products`, {
+            const createRes = await fetch(`${API_BASE}/api/products`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
