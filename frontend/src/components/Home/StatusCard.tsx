@@ -5,7 +5,7 @@ import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
 import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
 import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
 
-const API_BASE = "http://localhost:3001/api";
+const API_BASE = import.meta.env.API_BASE;
 
 type Order = {
     id: number;
