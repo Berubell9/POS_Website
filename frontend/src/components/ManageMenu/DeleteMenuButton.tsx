@@ -12,7 +12,7 @@ type DeleteMenuButtonProps = {
     onAlert?: (message: string, type: "success" | "error" | "info" | "warning") => void;
 };
 
-const API_BASE = "http://localhost:3001/api";
+const API_BASE = import.meta.env.VITE_API_BASE;
 
 export default function DeleteMenuButton({
     product,
@@ -24,7 +24,7 @@ export default function DeleteMenuButton({
         if (!confirmed) return;
 
         try {
-            const res = await fetch(`${API_BASE}/products/${product.id}`, {
+            const res = await fetch(`${API_BASE}/api/products/${product.id}`, {
                 method: "DELETE",
             });
 
