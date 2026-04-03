@@ -53,7 +53,7 @@ export default function Home() {
         try {
             setLoading(true);
 
-            const res = await fetch(`${API_BASE}/orders`);
+            const res = await fetch(`${API_BASE}/api/orders`);
 
             if (!res.ok) {
                 console.error("updateOrderStatus error:", res);
