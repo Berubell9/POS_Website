@@ -16,7 +16,7 @@ type EditTableButtonProps = {
 
 };
 
-const API_BASE = "http://localhost:3001/api";
+const API_BASE = import.meta.env.VITE_API_BASE;
 
 export default function EditTableButton({
     table,
@@ -47,7 +47,7 @@ export default function EditTableButton({
         try {
             setLoading(true);
 
-            const res = await fetch(`${API_BASE}/tables/${table.id}`, {
+            const res = await fetch(`${API_BASE}/api/tables/${table.id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
