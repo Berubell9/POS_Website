@@ -179,6 +179,7 @@ export default function ProductItemTable({
                             fetchData();
                             onAdded?.();
                         }}
+                        onAlert={(message, type) => setAlert({ message, type })}
                     />
                 </div>
             </div>
@@ -223,7 +224,7 @@ export default function ProductItemTable({
                             </td>
 
                             {/* ชื่อเมนู */}
-                            <td className="px-4 py-3 text-left">{product.name}</td>
+                            <td className="px-4 py-3 text-left break-all">{product.name}</td>
 
                             {/* หมวดหมู่ */}
                             <td className="hidden lg:table-cell px-4 py-3 text-left">

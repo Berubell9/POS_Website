@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import PostAddOutlinedIcon from "@mui/icons-material/PostAddOutlined";
-import Alert from "../../components/Alert";
+
 type Category = {
     id: number;
     name: string;
@@ -9,11 +9,15 @@ type Category = {
 
 type AddMenuButtonProps = {
     onAdded?: () => void | Promise<void>;
+    onAlert?: (message: string, type: "success" | "error" | "info" | "warning") => void;
 };
 
 const API_BASE = "http://localhost:3001/api";
 
-export default function AddMenuButton({ onAdded }: AddMenuButtonProps) {
+export default function AddMenuButton({
+    onAdded,
+    onAlert
+}: AddMenuButtonProps) {
     // Open Modal
     const [open, setOpen] = useState(false);
 
@@ -25,12 +29,6 @@ export default function AddMenuButton({ onAdded }: AddMenuButtonProps) {
     const [newProductCategoryId, setNewProductCategoryId] = useState("");
     const [newProductPrice, setNewProductPrice] = useState("");
     const [loading, setLoading] = useState(false);
-
-    // Notion State
-    const [alert, setAlert] = useState<{
-        message: string;
-        type: "success" | "error" | "info" | "warning";
-    } | null>(null);
 
     // ดึงข้อมูล Categories เมื่อเปิด Modal
     useEffect(() => {
@@ -45,10 +43,7 @@ export default function AddMenuButton({ onAdded }: AddMenuButtonProps) {
             const res = await fetch(`${API_BASE}/categories`);
 
             if (!res.ok) {
-                setAlert({
-                    message: "โหลดข้อมูลหมวดหมู่ไม่สำเร็จ",
-                    type: "error",
-                });
+                onAlert?.("โหลดข้อมูลหมวดหมู่ไม่สำเร็จ", "error");
                 return;
             }
 
@@ -56,10 +51,7 @@ export default function AddMenuButton({ onAdded }: AddMenuButtonProps) {
             setCategories(data || []);
         } catch (error) {
             console.error("Error fetching categories:", error);
-            setAlert({
-                message: "ดึงข้อมูลหมวดหมู่ไม่สำเร็จ",
-                type: "error",
-            });
+            onAlert?.("ดึงข้อมูลหมวดหมู่ไม่สำเร็จ", "error");
             return;
         }
     };
@@ -96,34 +88,22 @@ export default function AddMenuButton({ onAdded }: AddMenuButtonProps) {
     // เมื่อกดปุ่มบันทึก จะมีแจ้งเตือน Error เมื่อใส่ข้อมูลไม่ครบ
     const addProduct = async () => {
         if (!newProductName.trim()) {
-            setAlert({
-                message: "กรุณากรอกชื่อเมนู",
-                type: "warning",
-            });
+            onAlert?.("กรุณากรอกชื่อเมนู", "warning");
             return;
         }
 
         if (!newProductCategoryId) {
-            setAlert({
-                message: "กรุณาเลือกหมวดหมู่",
-                type: "warning",
-            });
+            onAlert?.("กรุณาเลือกหมวดหมู่", "warning");
             return;
         }
 
         if (!newProductPrice.trim() || isNaN(Number(newProductPrice))) {
-            setAlert({
-                message: "กรุณากรอกราคาให้ถูกต้อง",
-                type: "warning",
-            });
+            onAlert?.("กรุณากรอกราคาให้ถูกต้อง", "warning");
             return;
         }
 
         if (!newProductImageFile) {
-            setAlert({
-                message: "กรุณาเลือกรูปภาพ",
-                type: "warning",
-            });
+            onAlert?.("กรุณาเลือกรูปภาพ", "warning");
             return;
         }
 
@@ -145,10 +125,7 @@ export default function AddMenuButton({ onAdded }: AddMenuButtonProps) {
 
             if (!uploadRes.ok) {
                 console.error("Upload image error:", uploadResult);
-                setAlert({
-                    message: "อัปโหลดรูปไม่สำเร็จ",
-                    type: "error",
-                });
+                onAlert?.("อัปโหลดรูปไม่สำเร็จ", "error");
                 return;
             }
 
@@ -175,25 +152,16 @@ export default function AddMenuButton({ onAdded }: AddMenuButtonProps) {
 
             if (!createRes.ok) {
                 console.error("Insert product error:", createResult);
-                setAlert({
-                    message: "เพิ่มเมนูไม่สำเร็จ",
-                    type: "error",
-                });
+                onAlert?.("เพิ่มเมนูไม่สำเร็จ", "error");
                 return;
             }
 
-            setAlert({
-                message: "เพิ่มเมนูสำเร็จ",
-                type: "success",
-            });
+            onAlert?.("เพิ่มเมนูสำเร็จ", "success");
             handleClose();
             await onAdded?.();
         } catch (error) {
             console.error("Error adding product:", error);
-            setAlert({
-                message: "เกิดข้อผิดพลาดขณะเพิ่มเมนู",
-                type: "error",
-            });
+            onAlert?.("เกิดข้อผิดพลาดขณะเพิ่มเมนู", "error");
         } finally {
             setLoading(false);
         }
@@ -201,13 +169,6 @@ export default function AddMenuButton({ onAdded }: AddMenuButtonProps) {
 
     return (
         <div>
-            {alert && (
-                <Alert
-                    message={alert.message}
-                    type={alert.type}
-                    onClose={() => setAlert(null)}
-                />
-            )}
             {/* ปุ่มกดเรียก Modal */}
             <button
                 onClick={() => setOpen(true)}
@@ -221,7 +182,7 @@ export default function AddMenuButton({ onAdded }: AddMenuButtonProps) {
             {open && (
                 // พื้นหลังดำ
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-                    
+
                     {/* พื้นหลังขาว */}
                     <div
                         className="w-full max-w-lg rounded-xl bg-white p-6 shadow-lg"
@@ -290,11 +251,18 @@ export default function AddMenuButton({ onAdded }: AddMenuButtonProps) {
                             <div>
                                 <label className="block font-bold">ราคา (บาท)</label>
                                 <input
-                                    type="text"
+                                    type="number"
+                                    min="0"
+                                    step="0.01"
                                     placeholder="โปรดระบุราคา"
                                     value={newProductPrice}
-                                    onChange={(e) => setNewProductPrice(e.target.value)}
-                                    className="mt-1 w-full text-gray-500 font-light rounded-md border border-gray-200 p-2 outline-none"
+                                    onChange={(e) => {
+                                        const value = e.target.value;
+                                        if (value === "" || Number(value) >= 0) {
+                                            setNewProductPrice(value);
+                                        }
+                                    }}
+                                    className="mt-1 w-full rounded-md border border-gray-200 p-2 font-light text-gray-500 outline-none"
                                 />
                             </div>
                         </div>

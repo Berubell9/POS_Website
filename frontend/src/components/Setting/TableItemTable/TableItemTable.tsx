@@ -130,7 +130,7 @@ export default function TableItemTable({ refreshKey }: TableItemTableProps) {
                                     {(currentPage - 1) * itemsPerPage + index + 1}
                                 </td>
 
-                                <td className="px-4 py-3 text-left">{table.table_number}</td>
+                                <td className="px-4 py-3 text-left break-all">{table.table_number}</td>
 
                                 <td className="px-4 py-3 text-center">
                                     <span
