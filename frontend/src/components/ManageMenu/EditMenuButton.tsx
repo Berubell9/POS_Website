@@ -242,10 +242,18 @@ export default function EditMenuButton({
                             <div>
                                 <label className="block font-bold">ราคา (บาท)</label>
                                 <input
-                                    type="text"
+                                    type="number"
+                                    min="0"
+                                    step="0.01"
+                                    placeholder="โปรดระบุราคา"
                                     value={productPrice}
-                                    onChange={(e) => setProductPrice(e.target.value)}
-                                    placeholder="ระบุราคา"
+                                    onChange={(e) => {
+                                        const value = e.target.value;
+
+                                        if (value === "" || Number(value) >= 0) {
+                                            setProductPrice(value);
+                                        }
+                                    }}
                                     className="mt-1 w-full text-gray-500 font-light rounded-md border border-gray-200 p-2 outline-none"
                                 />
                             </div>
