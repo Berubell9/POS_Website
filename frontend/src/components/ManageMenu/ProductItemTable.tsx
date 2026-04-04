@@ -179,6 +179,7 @@ export default function ProductItemTable({
                             fetchData();
                             onAdded?.();
                         }}
+                        onAlert={(message, type) => setAlert({ message, type })}
                     />
                 </div>
             </div>
