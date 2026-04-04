@@ -185,7 +185,7 @@ export default function CategoryItemTable({
                             </td>
 
                             {/* ชื่อหมวดหมู่ */}
-                            <td className="px-4 py-3 text-left">{category.name}</td>
+                            <td className="px-4 py-3 text-left break-all">{category.name}</td>
 
                             {/* จำนวนเมนู */}
                             <td className="px-4 py-3 text-center">
