@@ -196,7 +196,7 @@ export default function Home() {
                             onAction={(orderId) => updateOrderStatus(orderId, "กำลังทำ")}
                         />
 
-                        {/* คอลัม พร้อมเสิร์ฟ */}
+                        {/* คอลัม กำลังทำ*/}
                         <OrderColumn
                             title="กำลังทำ"
                             color="sky"
@@ -206,7 +206,7 @@ export default function Home() {
                             onAction={(orderId) => updateOrderStatus(orderId, "พร้อมเสิร์ฟ")}
                         />
 
-                        {/* คอลัม เสร็จสิ้น */}
+                        {/* คอลัม พร้อมเสิร์ฟ */}
                         <OrderColumn
                             title="พร้อมเสิร์ฟ"
                             color="green"
